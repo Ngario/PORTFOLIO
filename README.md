@@ -1,2 +1,2 @@
 # PORTFOLIO
-A portfolio site in react library
+A portfolio project in php, codeigniter and mysql db
