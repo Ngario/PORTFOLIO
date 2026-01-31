@@ -80,19 +80,53 @@ a:hover {
 }
 
 /* ============================================
-   4. HERO SECTION
+   4. HERO SECTION - PURPLE SILKY GRADIENT
    ============================================
-   Purpose: Eye-catching homepage banner
+   Purpose: Eye-catching homepage banner with smooth purple gradient
+   Design: Silky, mesh-like gradient effect
 */
 .hero-section {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* Multi-layered DARKER purple gradient for silky effect */
+    background: linear-gradient(135deg, 
+        #4a148c 0%,      /* Dark purple */
+        #6a1b9a 25%,     /* Deep purple */
+        #7b1fa2 50%,     /* Rich purple */
+        #4a148c 75%,     /* Dark purple */
+        #311b92 100%     /* Very dark purple */
+    );
+    
+    /* Add mesh overlay for silky texture with darker tones */
+    background-image: 
+        linear-gradient(135deg, #4a148c 0%, #6a1b9a 25%, #7b1fa2 50%, #4a148c 75%, #311b92 100%),
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(123, 31, 162, 0.2) 0%, transparent 50%);
+    
+    background-size: 100% 100%, 150% 150%, 200% 200%;
+    background-position: 0% 0%, 0% 0%, 100% 100%;
+    
+    /* Smooth animation */
+    animation: meshGradient 15s ease infinite;
+    
     color: white;
-    padding: 100px 0;
+    padding: 60px 0;  /* REDUCED from 120px - makes hero section shorter */
     position: relative;
     overflow: hidden;
+    
+    /* Add stronger shadow for depth on darker background */
+    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.4);
 }
 
-/* Animated background pattern (optional) */
+/* Animated mesh gradient effect */
+@keyframes meshGradient {
+    0%, 100% {
+        background-position: 0% 0%, 0% 0%, 100% 100%;
+    }
+    50% {
+        background-position: 100% 100%, 50% 50%, 0% 0%;
+    }
+}
+
+/* Floating particles effect for silky look */
 .hero-section::before {
     content: '';
     position: absolute;
@@ -100,8 +134,50 @@ a:hover {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.05)"/></svg>');
-    opacity: 0.3;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 20%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 30%);
+    animation: floatParticles 20s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes floatParticles {
+    0%, 100% {
+        opacity: 0.3;
+        transform: translateY(0px);
+    }
+    50% {
+        opacity: 0.6;
+        transform: translateY(-20px);
+    }
+}
+
+/* Silky shimmer effect on hover */
+.hero-section::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 70%
+    );
+    animation: shimmer 8s infinite;
+    pointer-events: none;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
 }
 
 .hero-section .container {
@@ -110,31 +186,43 @@ a:hover {
 }
 
 .hero-section h1 {
-    font-size: 3.5rem;
+    font-size: 2.5rem;  /* REDUCED from 3.5rem - more compact */
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 15px;  /* REDUCED from 20px */
+    text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.5);  /* Stronger shadow for darker bg */
+    letter-spacing: -1px;
 }
 
 .hero-section p {
-    font-size: 1.25rem;
-    margin-bottom: 30px;
+    font-size: 1.1rem;  /* REDUCED from 1.25rem */
+    margin-bottom: 20px;  /* REDUCED from 30px */
+    text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.4);  /* Stronger shadow for darker bg */
 }
 
-/* Hero buttons */
+/* Hero buttons with glassmorphism effect */
 .hero-section .btn {
     padding: 12px 30px;
     font-size: 1.1rem;
     margin: 5px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.hero-section .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 /* Responsive hero for mobile */
 @media (max-width: 768px) {
     .hero-section {
-        padding: 60px 0;
+        padding: 80px 0;
     }
     
     .hero-section h1 {
-        font-size: 2rem;
+        font-size: 2.2rem;
     }
     
     .hero-section p {
@@ -148,7 +236,7 @@ a:hover {
    Purpose: Consistent spacing and styling for content sections
 */
 .section {
-    padding: 80px 0;
+    padding: 50px 0;  /* REDUCED from 80px - brings sections closer together */
 }
 
 .section-title {
@@ -176,43 +264,317 @@ a:hover {
     margin-bottom: 50px;
 }
 
-/* Alternate section background colors */
-.section-light {
-    background-color: var(--light-color);
+/* ============================================
+   SECTION COLOR THEMES - RHYMING COLOR SCHEME
+   ============================================
+   Purpose: Create visual variety with cohesive colors
+   Pattern: Alternating dark/light sections
+*/
+
+/* Default section titles - Purple gradient */
+.section-title {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 /* ============================================
-   6. CARD COMPONENTS
+   1. ABOUT SECTION - DARK (Like Header)
+   ============================================ */
+#about {
+    background: linear-gradient(135deg, 
+        #1a1a1a 0%,      /* Dark charcoal */
+        #2d2d2d 50%,     /* Medium dark gray */
+        #1a1a1a 100%     /* Dark charcoal */
+    );
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle light overlay for depth */
+#about::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(102, 126, 234, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+#about .container {
+    position: relative;
+    z-index: 1;
+}
+
+/* About section - light text on dark */
+#about .section-title {
+    color: #ffffff;
+    background: none;
+    -webkit-text-fill-color: #ffffff;
+}
+
+#about .section-subtitle {
+    color: #b0b0b0;
+}
+
+#about p {
+    color: #e0e0e0;
+    line-height: 1.8;
+}
+
+#about .lead {
+    color: #ffffff;
+    font-size: 1.2rem;
+}
+
+#about strong {
+    color: #667eea;
+    font-weight: 600;
+}
+
+/* Profile photo - subtle glow */
+#about img.rounded-circle {
+    border: 3px solid #667eea;
+    box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+}
+
+/* Skills badges */
+#about .badge {
+    background: rgba(102, 126, 234, 0.2);
+    color: #ffffff;
+    border: 1px solid rgba(102, 126, 234, 0.4);
+    font-weight: 600;
+    padding: 8px 16px;
+    margin: 5px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+#about .badge:hover {
+    transform: translateY(-3px);
+    background: rgba(102, 126, 234, 0.4);
+    border-color: #667eea;
+}
+
+#about .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: #ffffff;
+}
+
+#about .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
+}
+
+#about .btn-outline-primary {
+    border: 2px solid #667eea;
+    color: #667eea;
+    background: transparent;
+}
+
+#about .btn-outline-primary:hover {
+    background: rgba(102, 126, 234, 0.1);
+    border-color: #764ba2;
+}
+
+/* ============================================
+   2. PROJECTS SECTION - LIGHT BLUE TINT
+   ============================================ */
+#projects {
+    background: linear-gradient(180deg, 
+        #f0f4ff 0%,      /* Very light blue */
+        #e8f0fe 100%     /* Light sky blue */
+    );
+    position: relative;
+}
+
+/* ============================================
+   3. SERVICES SECTION - DARK SLATE
+   ============================================ */
+#services {
+    background: linear-gradient(135deg, 
+        #2c3e50 0%,      /* Dark slate blue */
+        #34495e 50%,     /* Slate gray */
+        #2c3e50 100%     /* Dark slate blue */
+    );
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Services section subtle overlay */
+#services::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 30% 40%, rgba(52, 152, 219, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+#services .container {
+    position: relative;
+    z-index: 1;
+}
+
+#services .section-title {
+    color: #ffffff;
+    background: none;
+    -webkit-text-fill-color: #ffffff;
+}
+
+#services .section-subtitle {
+    color: #bdc3c7;
+}
+
+#services p {
+    color: #ecf0f1;
+}
+
+#services .service-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+#services .service-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(52, 152, 219, 0.5);
+}
+
+#services .service-card h3,
+#services .service-card p {
+    color: #ffffff;
+}
+
+/* ============================================
+   4. BLOGS SECTION - LIGHT LAVENDER
+   ============================================ */
+#blogs {
+    background: linear-gradient(180deg, 
+        #f8f5ff 0%,      /* Very light lavender */
+        #f0ebff 100%     /* Light purple tint */
+    );
+}
+
+/* ============================================
+   5. CONTACT CTA SECTION - VIBRANT PURPLE
+   ============================================ */
+#contact-cta {
+    background: linear-gradient(135deg, 
+        #667eea 0%, 
+        #764ba2 50%, 
+        #667eea 100%
+    ) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+#contact-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(138, 84, 233, 0.2) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+#contact-cta .container {
+    position: relative;
+    z-index: 1;
+}
+
+#contact-cta h2,
+#contact-cta p {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+#contact-cta .btn-light {
+    background: #ffffff;
+    color: #667eea;
+    font-weight: 600;
+    border: none;
+}
+
+#contact-cta .btn-light:hover {
+    background: #f8f9fa;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+}
+
+/* ============================================
+   6. CARD COMPONENTS - ENHANCED WITH PURPLE ACCENTS
    ============================================
-   Purpose: Project, Service, Blog cards
+   Purpose: Project, Service, Blog cards with modern design
 */
 .custom-card {
     border: none;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.1);
     transition: all var(--transition-speed) ease;
     height: 100%;
+    background: white;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle purple gradient border effect */
+.custom-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea, #764ba2, #8e54e9);
+    opacity: 0;
+    transition: opacity var(--transition-speed) ease;
+}
+
+.custom-card:hover::before {
+    opacity: 1;
 }
 
 .custom-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.25);
 }
 
 .custom-card img {
-    border-radius: 10px 10px 0 0;
+    border-radius: 15px 15px 0 0;
     height: 200px;
     object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.custom-card:hover img {
+    transform: scale(1.05);
 }
 
 .custom-card .card-body {
-    padding: 20px;
+    padding: 25px;
 }
 
 .custom-card .card-title {
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     font-weight: 600;
     margin-bottom: 15px;
+    color: #2d3748;
 }
 
 /* ============================================
@@ -248,28 +610,66 @@ a:hover {
 }
 
 /* ============================================
-   8. SERVICE CARDS
+   8. SERVICE CARDS - PURPLE GRADIENT THEME
    ============================================ */
 .service-card {
     text-align: center;
-    padding: 30px;
+    padding: 40px 30px;
     background: white;
-    border-radius: 10px;
+    border-radius: 15px;
     transition: all var(--transition-speed) ease;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #f0f0f0;
+}
+
+/* Purple gradient background on hover */
+.service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    opacity: 0;
+    transition: opacity var(--transition-speed) ease;
+    z-index: 0;
+}
+
+.service-card:hover::before {
+    opacity: 1;
+}
+
+.service-card > * {
+    position: relative;
+    z-index: 1;
 }
 
 .service-card .service-icon {
-    font-size: 3rem;
-    color: var(--primary-color);
+    font-size: 3.5rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-bottom: 20px;
+    transition: all var(--transition-speed) ease;
 }
 
 .service-card:hover {
-    background: var(--primary-color);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
     color: white;
+    border-color: transparent;
 }
 
 .service-card:hover .service-icon {
+    -webkit-text-fill-color: white;
+    transform: scale(1.1);
+}
+
+.service-card:hover h4,
+.service-card:hover p {
     color: white;
 }
 
@@ -290,18 +690,45 @@ footer .social-links a:hover {
 }
 
 /* ============================================
-   10. BUTTONS
+   10. BUTTONS - PURPLE GRADIENT THEME
    ============================================ */
 .btn {
-    border-radius: 5px;
-    padding: 10px 25px;
+    border-radius: 8px;
+    padding: 12px 30px;
     font-weight: 500;
     transition: all var(--transition-speed) ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+
+/* Purple gradient for primary buttons */
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Outline buttons with purple accent */
+.btn-outline-primary {
+    border: 2px solid #667eea;
+    color: #667eea;
+    background: transparent;
+}
+
+.btn-outline-primary:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: transparent;
+    color: white;
 }
 
 /* ============================================
@@ -342,11 +769,30 @@ footer .social-links a:hover {
     }
 }
 
-/* Badge styles */
+/* Badge styles with purple accents */
 .badge-custom {
-    padding: 5px 10px;
+    padding: 6px 12px;
     border-radius: 20px;
     font-size: 0.85rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: 500;
+}
+
+.badge-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+}
+
+/* Skill badges with glassmorphism effect */
+.badge {
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
 }
 
 /* ============================================

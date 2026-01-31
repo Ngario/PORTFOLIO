@@ -1,0 +1,15 @@
+# CodeIgniter 4 - Redirect all requests to public folder
+# This file ensures that accessing http://localhost/portfolio/
+# actually loads from the public/ folder
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Redirect all requests to public folder
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# If mod_rewrite is not enabled, show error
+<IfModule !mod_rewrite.c>
+    ErrorDocument 404 /index.php
+</IfModule>

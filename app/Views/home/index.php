@@ -9,7 +9,7 @@
 
 <!-- Set page title (overrides default in layout) -->
 <?= $this->section('title') ?>
-Home - Professional Portfolio
+Home - Idd Mumanyi Portfolio
 <?= $this->endSection() ?>
 
 <!-- Set meta description for SEO -->
@@ -37,7 +37,7 @@ Welcome to my professional portfolio. Explore my projects, services, downloads, 
                 
                 <!-- Subheadline -->
                 <p class="lead mb-4 animate-on-scroll">
-                    Full-Stack Developer | Creative Problem Solver | Digital Content Creator
+                    Full-Stack Developer | Graphics Designer | Tech Artist
                 </p>
                 
                 <!-- Typed effect placeholder (we'll add JS for this later) -->
@@ -80,7 +80,7 @@ Welcome to my professional portfolio. Explore my projects, services, downloads, 
             <!-- Left: Image -->
             <div class="col-lg-5 mb-4 mb-lg-0 animate-on-scroll">
                 <!-- Replace with actual profile photo -->
-                <img src="<?= base_url('images/profile.jpg') ?>" 
+                <img src="<?= base_url('images/profile/profilemine.jpg') ?>" 
                      alt="Profile Photo" 
                      class="img-fluid rounded-circle shadow"
                      style="max-width: 350px;"
@@ -110,9 +110,9 @@ Welcome to my professional portfolio. Explore my projects, services, downloads, 
                     
                     <p>
                         With years of experience in web development, I specialize in 
-                        <strong>PHP, CodeIgniter, JavaScript, MySQL</strong>, and modern 
+                        <strong>PHP, CodeIgniter, JavaScript, MySQL, PostgresSQL</strong>, and modern 
                         frontend frameworks. I'm dedicated to creating user-friendly, 
-                        responsive, and scalable applications.
+                        responsive, and scalable applications. I'm also a graphics designer in Adobe Photoshop and Illustrator.
                     </p>
                 <?php endif; ?>
                 
@@ -141,7 +141,7 @@ Welcome to my professional portfolio. Explore my projects, services, downloads, 
      Purpose: Showcase portfolio work
      Data: $projects array from controller
 -->
-<section class="section section-light">
+<section id="projects" class="section section-light">
     <div class="container">
         <!-- Section Header -->
         <div class="text-center mb-5">
@@ -241,7 +241,7 @@ Welcome to my professional portfolio. Explore my projects, services, downloads, 
      Purpose: What you offer
      Data: $services array from controller
 -->
-<section class="section">
+<section id="services" class="section">
     <div class="container">
         <!-- Section Header -->
         <div class="text-center mb-5">
@@ -325,7 +325,7 @@ Welcome to my professional portfolio. Explore my projects, services, downloads, 
      Purpose: Content marketing, SEO
      Data: $blogs array from controller
 -->
-<section class="section section-light">
+<section id="blogs" class="section section-light">
     <div class="container">
         <!-- Section Header -->
         <div class="text-center mb-5">
@@ -406,7 +406,7 @@ Welcome to my professional portfolio. Explore my projects, services, downloads, 
      ============================================
      Purpose: Lead generation
 -->
-<section class="section bg-primary text-white text-center">
+<section id="contact-cta" class="section bg-primary text-white text-center">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8 animate-on-scroll">

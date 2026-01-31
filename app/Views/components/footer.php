@@ -23,10 +23,10 @@
             <!-- COLUMN 1: About -->
             <div class="col-lg-3 col-md-6 mb-4">
                 <h5 class="text-uppercase mb-3">
-                    <i class="fas fa-code me-2"></i>Your Portfolio
+                    <i class="fas fa-code me-2"></i>Idd Mumanyi
                 </h5>
                 <p class="small">
-                    Professional portfolio showcasing projects, services, and digital downloads. 
+                    Single site showcasing my projects, services, and digital downloads. 
                     Empowering developers and creators with quality resources.
                 </p>
                 
@@ -39,10 +39,10 @@
                     <a href="#" class="text-white me-3" title="Twitter">
                         <i class="fab fa-twitter fa-lg"></i>
                     </a>
-                    <a href="#" class="text-white me-3" title="LinkedIn">
+                    <a href="https://www.linkedin.com/in/mrambaji-tech-526303375/" class="text-white me-3" title="LinkedIn">
                         <i class="fab fa-linkedin-in fa-lg"></i>
                     </a>
-                    <a href="#" class="text-white me-3" title="GitHub">
+                    <a href="https://github.com/Ngario" class="text-white me-3" title="GitHub">
                         <i class="fab fa-github fa-lg"></i>
                     </a>
                     <a href="#" class="text-white" title="YouTube">
@@ -132,7 +132,7 @@
                     </li>
                     <li class="mb-2">
                         <a href="<?= base_url('contact') ?>" class="text-white-50 text-decoration-none">
-                            <i class="fas fa-chevron-right me-2"></i>Contact Us
+                            <i class="fas fa-chevron-right me-2"></i>Contact Me
                         </a>
                     </li>
                 </ul>
@@ -142,14 +142,14 @@
                     <h6 class="text-uppercase">Contact</h6>
                     <p class="small mb-1">
                         <i class="fas fa-envelope me-2"></i>
-                        <a href="mailto:your@email.com" class="text-white-50 text-decoration-none">
-                            your@email.com
+                        <a href="mailto:ngariomumanyi@gmail.com" class="text-white-50 text-decoration-none">
+                            ngariomumanyi@gmail.com
                         </a>
                     </p>
                     <p class="small mb-1">
                         <i class="fas fa-phone me-2"></i>
                         <a href="tel:+254712345678" class="text-white-50 text-decoration-none">
-                            +254 712 345 678
+                            +254 796349982
                         </a>
                     </p>
                 </div>
@@ -162,12 +162,12 @@
         <div class="row">
             <div class="col-md-6 text-center text-md-start">
                 <p class="small mb-0">
-                    &copy; <?= date('Y') ?> Your Portfolio. All rights reserved.
+                    &copy; <?= date('Y') ?> Idd Mumanyi. All rights reserved.
                 </p>
             </div>
             <div class="col-md-6 text-center text-md-end">
                 <p class="small mb-0">
-                    Built with <i class="fas fa-heart text-danger"></i> using CodeIgniter 4
+                    Built with <i class="fas fa-heart text-danger"></i> Mrambajitech
                 </p>
             </div>
         </div>
