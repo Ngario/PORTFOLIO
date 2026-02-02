@@ -205,24 +205,60 @@ Welcome to my professional portfolio. Explore my projects, services, downloads, 
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <!-- Placeholder cards if no data -->
-                <?php for ($i = 1; $i <= 3; $i++): ?>
-                    <div class="col-md-6 col-lg-4 animate-on-scroll">
-                        <div class="card custom-card">
-                            <img src="https://via.placeholder.com/400x250?text=Project+<?= $i ?>" 
-                                 class="card-img-top" 
-                                 alt="Project <?= $i ?>">
-                            <div class="card-body">
-                                <h5 class="card-title">Sample Project <?= $i ?></h5>
-                                <p class="card-text text-muted">
-                                    This is a sample project description. Replace with actual project data from database.
-                                </p>
-                                <span class="badge badge-custom bg-secondary me-1">PHP</span>
-                                <span class="badge badge-custom bg-secondary me-1">MySQL</span>
-                            </div>
+                <!-- Placeholder cards with your actual images -->
+                <div class="col-md-6 col-lg-4 animate-on-scroll">
+                    <div class="card custom-card">
+                        <img src="<?= base_url('images/projects/portimage.jpg') ?>" 
+                             class="card-img-top" 
+                             alt="Portfolio Website">
+                        <div class="card-body">
+                            <h5 class="card-title">Personal Portfolio Website</h5>
+                            <p class="card-text text-muted">
+                                Modern portfolio website built with CodeIgniter 4, featuring responsive design and dynamic content management.
+                            </p>
+                            <span class="badge badge-custom bg-secondary me-1">PHP</span>
+                            <span class="badge badge-custom bg-secondary me-1">CodeIgniter</span>
+                            <span class="badge badge-custom bg-secondary me-1">MySQL</span>
+                            <span class="badge badge-custom bg-secondary me-1">Bootstrap</span>
                         </div>
                     </div>
-                <?php endfor; ?>
+                </div>
+                
+                <div class="col-md-6 col-lg-4 animate-on-scroll">
+                    <div class="card custom-card">
+                        <img src="<?= base_url('images/projects/advnaturesarina.png') ?>" 
+                             class="card-img-top" 
+                             alt="E-commerce Platform">
+                        <div class="card-body">
+                            <h5 class="card-title">Adventure Booking Platform</h5>
+                            <p class="card-text text-muted">
+                                Full-featured online adveture booking platform with payment integration, inventory management, and order tracking system.
+                            </p>
+                            <span class="badge badge-custom bg-secondary me-1">React</span>
+                            <span class="badge badge-custom bg-secondary me-1">PostgresQL</span>
+                            <span class="badge badge-custom bg-secondary me-1">TypeScript</span>
+                            <span class="badge badge-custom bg-secondary me-1">Figma</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4 animate-on-scroll">
+                    <div class="card custom-card">
+                        <img src="<?= base_url('images/projects/sems.jpg') ?>" 
+                             class="card-img-top" 
+                             alt="Mobile App Design">
+                        <div class="card-body">
+                            <h5 class="card-title">School Exam Management System</h5>
+                            <p class="card-text text-muted">
+                                Modern school exam management system with focus on user experience and accessibility.
+                            </p>
+                            <span class="badge badge-custom bg-secondary me-1">UI/UX</span>
+                            <span class="badge badge-custom bg-secondary me-1">Node.js</span>
+                            <span class="badge badge-custom bg-secondary me-1">Typescript</span>
+                            <span class="badge badge-custom bg-secondary me-1">PostgresQL</span>
+                        </div>
+                    </div>
+                </div>
             <?php endif; ?>
         </div>
         
@@ -369,26 +405,60 @@ Welcome to my professional portfolio. Explore my projects, services, downloads, 
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <!-- Placeholder blog posts -->
-                <?php for ($i = 1; $i <= 3; $i++): ?>
-                    <div class="col-md-6 col-lg-4 animate-on-scroll">
-                        <div class="card custom-card">
-                            <img src="https://via.placeholder.com/400x250?text=Blog+Post+<?= $i ?>" 
-                                 class="card-img-top" 
-                                 alt="Blog Post <?= $i ?>">
-                            <div class="card-body">
-                                <span class="badge bg-success mb-2">Tutorial</span>
-                                <h5 class="card-title">Sample Blog Post <?= $i ?></h5>
-                                <p class="card-text text-muted small">
-                                    <i class="fas fa-calendar me-2"></i><?= date('M d, Y') ?>
-                                </p>
-                                <p class="card-text">
-                                    This is a sample blog post description. Replace with actual content from database.
-                                </p>
-                            </div>
+                <!-- Placeholder blog posts with your actual images -->
+                <div class="col-md-6 col-lg-4 animate-on-scroll">
+                    <div class="card custom-card">
+                        <img src="<?= base_url('images/blog/Ai.jpg') ?>" 
+                             class="card-img-top" 
+                             alt="AI and Machine Learning">
+                        <div class="card-body">
+                            <span class="badge bg-success mb-2">Technology</span>
+                            <h5 class="card-title">The Future of AI in our worplace</h5>
+                            <p class="card-text text-muted small">
+                                <i class="fas fa-calendar me-2"></i><?= date('M d, Y') ?>
+                            </p>
+                            <p class="card-text">
+                                Exploring how AI is transforming the way we work and live in our workplaces.
+                            </p>
                         </div>
                     </div>
-                <?php endfor; ?>
+                </div>
+                
+                <div class="col-md-6 col-lg-4 animate-on-scroll">
+                    <div class="card custom-card">
+                        <img src="<?= base_url('images/blog/financial.jpg') ?>" 
+                             class="card-img-top" 
+                             alt="Financial Management">
+                        <div class="card-body">
+                            <span class="badge bg-success mb-2">Finance</span>
+                            <h5 class="card-title">Smart Financial Planning for young Kenyans</h5>
+                            <p class="card-text text-muted small">
+                                <i class="fas fa-calendar me-2"></i><?= date('M d, Y') ?>
+                            </p>
+                            <p class="card-text">
+                                Essential financial tips and strategies for young Kenyans to manage income and grow wealth.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4 animate-on-scroll">
+                    <div class="card custom-card">
+                        <img src="<?= base_url('images/blog/food.jpg') ?>" 
+                             class="card-img-top" 
+                             alt="Cooking and Nutrition">
+                        <div class="card-body">
+                            <span class="badge bg-success mb-2">Health & Lifestyle</span>
+                            <h5 class="card-title">Healthy Eating Habits for all </h5>
+                            <p class="card-text text-muted small">
+                                <i class="fas fa-calendar me-2"></i><?= date('M d, Y') ?>
+                            </p>
+                            <p class="card-text">
+                                Quick and nutritious diet ideas, recipes and exercise patterns for all classes of people.
+                            </p>
+                        </div>
+                    </div>
+                </div>
             <?php endif; ?>
         </div>
         
