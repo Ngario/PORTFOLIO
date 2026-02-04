@@ -5,4 +5,75 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
+
+// ============================================
+// HOMEPAGE
+// ============================================
 $routes->get('/', 'Home::index');
+
+// ============================================
+// STATIC PAGES (About, Contact, Terms, Privacy)
+// ============================================
+$routes->get('about', 'Pages::about');
+$routes->get('contact', 'Pages::contact');
+$routes->post('contact/send', 'Pages::sendMessage');  // Form submission
+$routes->get('terms', 'Pages::terms');
+$routes->get('privacy', 'Pages::privacy');
+
+// ============================================
+// PROJECTS
+// ============================================
+$routes->get('projects', 'Projects::index');           // All projects
+$routes->get('projects/(:num)', 'Projects::view/$1');  // Single project by ID
+
+// ============================================
+// SERVICES
+// ============================================
+$routes->get('services', 'Services::index');           // All services
+$routes->get('services/(:num)', 'Services::view/$1');  // Single service by ID
+
+// ============================================
+// BLOG
+// ============================================
+$routes->get('blog', 'Blog::index');                    // All blog posts
+$routes->get('blog/(:segment)', 'Blog::view/$1');       // Single post by slug
+$routes->get('blog/category/(:segment)', 'Blog::category/$1');  // Posts by category
+
+// ============================================
+// DOWNLOADS
+// ============================================
+$routes->get('downloads', 'Downloads::index');                    // All downloads
+$routes->get('downloads/(:segment)', 'Downloads::category/$1');   // By category (software, books, etc.)
+$routes->get('download/(:num)', 'Downloads::view/$1');            // Single download page
+$routes->get('download/file/(:num)', 'Downloads::file/$1');       // Actual file download (requires login)
+
+// ============================================
+// AUTHENTICATION
+// ============================================
+$routes->get('login', 'Auth::login');
+$routes->post('login', 'Auth::attemptLogin');
+$routes->get('register', 'Auth::register');
+$routes->post('register', 'Auth::attemptRegister');
+$routes->get('logout', 'Auth::logout');
+
+// ============================================
+// USER DASHBOARD (Require login)
+// ============================================
+$routes->group('dashboard', ['filter' => 'auth'], function($routes) {
+    $routes->get('/', 'Dashboard::index');
+    $routes->get('profile', 'Dashboard::profile');
+    $routes->post('profile/update', 'Dashboard::updateProfile');
+    $routes->get('my-downloads', 'Dashboard::myDownloads');
+    $routes->get('my-orders', 'Dashboard::myOrders');
+    $routes->get('settings', 'Dashboard::settings');
+});
+
+// ============================================
+// CHECKOUT & PAYMENTS
+// ============================================
+$routes->get('cart', 'Cart::index');
+$routes->post('cart/add/(:num)', 'Cart::add/$1');
+$routes->post('cart/remove/(:num)', 'Cart::remove/$1');
+$routes->get('checkout', 'Checkout::index');
+$routes->post('checkout/process', 'Checkout::process');
+$routes->get('payment/callback', 'Payment::callback');  // M-Pesa callback

@@ -53,29 +53,26 @@
                 
                 <!-- HOME LINK -->
                 <li class="nav-item">
-                    <!-- 
-                        current_url() gets the current page URL
-                        We compare it to base_url('/') to highlight active page
-                        'active' class adds visual indicator
-                    -->
                     <a class="nav-link <?= current_url() === base_url('/') ? 'active' : '' ?>" 
                        href="<?= base_url('/') ?>">
                         <i class="fas fa-home me-1"></i> Home
                     </a>
                 </li>
                 
-                <!-- ABOUT LINK -->
+                <!-- ABOUT LINK - Smart Navigation -->
+                <!-- On homepage: Scrolls to #about section -->
+                <!-- On other pages: Goes to /about page -->
                 <li class="nav-item">
                     <a class="nav-link <?= current_url() === base_url('about') ? 'active' : '' ?>" 
-                       href="<?= base_url('about') ?>">
+                       href="<?= current_url() === base_url('/') ? '#about' : base_url('/#about') ?>">
                         <i class="fas fa-user me-1"></i> About
                     </a>
                 </li>
                 
-                <!-- PROJECTS LINK -->
+                <!-- PROJECTS LINK - Smart Navigation -->
                 <li class="nav-item">
                     <a class="nav-link <?= current_url() === base_url('projects') ? 'active' : '' ?>" 
-                       href="<?= base_url('projects') ?>">
+                       href="<?= current_url() === base_url('/') ? '#projects' : base_url('/#projects') ?>">
                         <i class="fas fa-folder-open me-1"></i> Projects
                     </a>
                 </li>
@@ -100,23 +97,23 @@
                     </ul>
                 </li>
                 
-                <!-- SERVICES LINK -->
+                <!-- SERVICES LINK - Smart Navigation -->
                 <li class="nav-item">
                     <a class="nav-link <?= current_url() === base_url('services') ? 'active' : '' ?>" 
-                       href="<?= base_url('services') ?>">
+                       href="<?= current_url() === base_url('/') ? '#services' : base_url('/#services') ?>">
                         <i class="fas fa-briefcase me-1"></i> Services
                     </a>
                 </li>
                 
-                <!-- BLOG LINK -->
+                <!-- BLOG LINK - Smart Navigation -->
                 <li class="nav-item">
                     <a class="nav-link <?= current_url() === base_url('blog') ? 'active' : '' ?>" 
-                       href="<?= base_url('blog') ?>">
+                       href="<?= current_url() === base_url('/') ? '#blogs' : base_url('/#blogs') ?>">
                         <i class="fas fa-blog me-1"></i> Blog
                     </a>
                 </li>
                 
-                <!-- CONTACT LINK -->
+                <!-- CONTACT LINK - Goes to separate contact page -->
                 <li class="nav-item">
                     <a class="nav-link <?= current_url() === base_url('contact') ? 'active' : '' ?>" 
                        href="<?= base_url('contact') ?>">
