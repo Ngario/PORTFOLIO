@@ -15,8 +15,19 @@ class App extends BaseConfig
      * WITH a trailing slash:
      *
      * E.g., http://example.com/
+     *
+     * On Render: set environment variable app.baseURL (e.g. https://yourapp.onrender.com/)
      */
     public string $baseURL = 'http://localhost/portfolio/';
+
+    public function __construct()
+    {
+        parent::__construct();
+        $baseURL = env('app.baseURL');
+        if ($baseURL !== false && $baseURL !== '') {
+            $this->baseURL = $baseURL;
+        }
+    }
 
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.

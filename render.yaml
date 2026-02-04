@@ -1,0 +1,40 @@
+# =============================================================================
+# render.yaml - Render Blueprint (Infrastructure as Code)
+# =============================================================================
+#
+# WHAT IS THIS FILE?
+# ------------------
+# Render can deploy your app by reading this file. It tells Render: "Create a
+# Web Service, build it with this Dockerfile, use this start command, set these
+# env vars." You can also configure everything in the Render dashboard; this
+# file is optional but good for learning and reproducibility.
+#
+# HOW RENDER USES IT
+# ------------------
+# When you connect your Git repo to Render, you can choose "Blueprint" and
+# point to this file. Render will create the service(s) defined here.
+#
+# =============================================================================
+
+services:
+  # One web service (your CodeIgniter app)
+  - type: web
+
+    # Display name in Render dashboard
+    name: portfolio
+
+    # Build: use Docker (not native PHP)
+    # Render will run: docker build -t ... .
+    # So it looks for Dockerfile in the repo root.
+    dockerfilePath: ./Dockerfile
+
+    # Region (optional) - pick one close to your users
+    # region: oregon
+
+    # Environment variables (set these for production)
+    envVars:
+      - key: CI_ENVIRONMENT
+        value: production
+    # IMPORTANT: In Render Dashboard → Environment, add:
+    #   app.baseURL = https://YOUR-APP-NAME.onrender.com/
+    # (Use the exact URL Render gives you after first deploy, with trailing slash)

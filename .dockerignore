@@ -1,0 +1,65 @@
+# =============================================================================
+# .dockerignore - Files/folders to EXCLUDE when copying into the Docker image
+# =============================================================================
+#
+# WHY USE .dockerignore?
+# ---------------------
+# When Docker runs "COPY . .", it would copy everything in your project. That
+# can include large or sensitive files we don't want in the image:
+#   - Slower builds, larger images
+#   - Risk of copying .env (secrets) or .git (history)
+#
+# .dockerignore works like .gitignore: list patterns here, and Docker will
+# skip them during COPY. Only the rest of the project is copied.
+#
+# =============================================================================
+
+# Dependencies - we install fresh in the image with "composer install"
+# Copying vendor from your PC could cause wrong PHP version or OS-specific files
+/vendor
+
+# Version control - not needed to run the app, and can be large
+.git
+.gitignore
+
+# Environment file - often contains local/dev secrets and DB passwords.
+# On Render you set environment variables in the dashboard; don't bake .env
+# into the image. If you need a default, use .env.example and copy that.
+.env
+.env.*
+!.env.example
+
+# Writable contents - logs, cache, session from your PC shouldn't go to image.
+# The Dockerfile creates writable/ and sets permissions; we don't need your
+# local writable data.
+/writable/cache/*
+/writable/logs/*
+/writable/session/*
+/writable/debugbar/*
+/writable/uploads/*
+# Keep the folder structure (empty dirs). .dockerignore doesn't remove dirs
+# created by COPY; we copy app and writable structure. So writable/ exists.
+# We just don't copy the contents of those subdirs if we use *.
+# Actually with * we're only ignoring contents. The COPY . . will still copy
+# writable/.htaccess, writable/index.html etc. and the empty dirs. Good.
+
+# Tests - not needed in production image
+/tests
+
+# IDE and OS files
+.idea
+.vscode
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Archives and backups - no need in image
+*.rar
+*.zip
+*.tar
+*.tar.gz
+
+# Documentation (optional - remove if you want README in image)
+# README.md
+# *.md
