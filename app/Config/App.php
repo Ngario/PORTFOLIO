@@ -27,6 +27,10 @@ class App extends BaseConfig
         if ($baseURL !== false && $baseURL !== '') {
             $this->baseURL = $baseURL;
         }
+        // Force HTTPS in production (e.g. Render)
+        if (ENVIRONMENT === 'production') {
+            $this->forceGlobalSecureRequests = true;
+        }
     }
 
     /**
@@ -167,6 +171,7 @@ class App extends BaseConfig
      * made via a secure connection (HTTPS). If the incoming request is not
      * secure, the user will be redirected to a secure version of the page
      * and the HTTP Strict Transport Security (HSTS) header will be set.
+     * Set true in production (e.g. Render) so all URLs use HTTPS.
      */
     public bool $forceGlobalSecureRequests = false;
 

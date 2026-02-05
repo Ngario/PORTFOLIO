@@ -194,11 +194,35 @@ class Database extends Config
     {
         parent::__construct();
 
-        // Ensure that we always set the database group to 'tests' if
-        // we are currently running an automated test suite, so that
-        // we don't overwrite live data on accident.
         if (ENVIRONMENT === 'testing') {
             $this->defaultGroup = 'tests';
+            return;
+        }
+
+        // Production (e.g. Render): use env vars so credentials are not in repo
+        $hostname = env('database.default.hostname');
+        if ($hostname !== false && $hostname !== null && $hostname !== '') {
+            $this->default['hostname'] = $hostname;
+        }
+        $username = env('database.default.username');
+        if ($username !== false && $username !== null) {
+            $this->default['username'] = $username;
+        }
+        $password = env('database.default.password');
+        if ($password !== false && $password !== null) {
+            $this->default['password'] = (string) $password;
+        }
+        $database = env('database.default.database');
+        if ($database !== false && $database !== null && $database !== '') {
+            $this->default['database'] = $database;
+        }
+        $port = env('database.default.port');
+        if ($port !== false && $port !== null && $port !== '') {
+            $this->default['port'] = (int) $port;
+        }
+        // Turn off DB debug in production to avoid exposing queries
+        if (ENVIRONMENT === 'production') {
+            $this->default['DBDebug'] = false;
         }
     }
 }
