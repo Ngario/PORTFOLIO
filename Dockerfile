@@ -39,19 +39,29 @@ FROM php:8.1-apache
 # -----------------------------------------------------------------------------
 # STEP 1.5: Install required PHP extensions for CodeIgniter 4
 # -----------------------------------------------------------------------------
-# CodeIgniter (via composer.json / composer.lock) requires:
-#   - ext-intl
-#   - ext-mbstring
-# and for MySQL you also need:
-#   - ext-mysqli
-# These are NOT all enabled by default in php:8.1-apache, so
-# `composer install` will fail on Render unless we install them.
+# CodeIgniter (via composer.lock) requires:
+#   - ext-intl  (needs libicu-dev)
+#   - ext-mbstring (needs libonig-dev for oniguruma)
+#   - ext-mysqli (for MySQL; no extra libs)
+# These are NOT all enabled by default in php:8.1-apache, so we compile them.
+#
+# Required Debian packages:
+#   libicu-dev   = for intl
+#   libonig-dev  = for mbstring (oniguruma)
+#   libzip-dev, zip, unzip = for Composer / general use
 # -----------------------------------------------------------------------------
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends libicu-dev zip unzip \
-    && docker-php-ext-install intl mbstring mysqli \
-    && docker-php-ext-enable intl mbstring mysqli \
-    && rm -rf /var/lib/apt/lists/*
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        libicu-dev \
+        libonig-dev \
+        libzip-dev \
+        zip \
+        unzip \
+    ; \
+    docker-php-ext-configure intl; \
+    docker-php-ext-install -j$(nproc) intl mbstring mysqli; \
+    rm -rf /var/lib/apt/lists/*
 
 # -----------------------------------------------------------------------------
 # STEP 2: Enable Apache mod_rewrite
