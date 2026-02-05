@@ -36,7 +36,7 @@
                     <a href="#" class="text-white me-3" title="Facebook">
                         <i class="fab fa-facebook-f fa-lg"></i>
                     </a>
-                    <a href="#" class="text-white me-3" title="Twitter">
+                    <a href="https://x.com/Alphaguy254" class="text-white me-3" title="Twitter">
                         <i class="fab fa-twitter fa-lg"></i>
                     </a>
                     <a href="https://www.linkedin.com/in/mrambaji-tech-526303375/" class="text-white me-3" title="LinkedIn">
@@ -45,7 +45,7 @@
                     <a href="https://github.com/Ngario" class="text-white me-3" title="GitHub">
                         <i class="fab fa-github fa-lg"></i>
                     </a>
-                    <a href="#" class="text-white" title="YouTube">
+                    <a href="https://www.youtube.com/@digitalimtaani4891" class="text-white" title="YouTube">
                         <i class="fab fa-youtube fa-lg"></i>
                     </a>
                 </div>

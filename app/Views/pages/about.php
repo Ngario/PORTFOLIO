@@ -44,7 +44,9 @@
                     <span class="badge bg-primary me-2 mb-2">PHP</span>
                     <span class="badge bg-primary me-2 mb-2">CodeIgniter 4</span>
                     <span class="badge bg-primary me-2 mb-2">MySQL</span>
-                    <span class="badge bg-primary me-2 mb-2">JavaScript</span>
+                    <span class="badge bg-primary me-2 mb-2">PostgresQL</span>
+                    <span class="badge bg-primary me-2 mb-2">TypeScript</span>
+                    <span class="badge bg-primary me-2 mb-2">Node.js</span>
                     <span class="badge bg-primary me-2 mb-2">Bootstrap</span>
                     <span class="badge bg-primary me-2 mb-2">Git</span>
                 </div>

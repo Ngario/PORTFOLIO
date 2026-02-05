@@ -84,31 +84,31 @@
                     </div>
                 </div>
                 
-                <div class="row mt-5">
-                    <div class="col-md-4 text-center mb-4">
-                        <div class="card h-100">
+                <div class="row mt-4 justify-content-center">
+                    <div class="col-10 col-sm-6 col-md-4 col-lg-3 mb-3">
+                        <div class="card contact-info-card text-center h-100">
                             <div class="card-body">
-                                <i class="fas fa-envelope fa-3x text-primary mb-3"></i>
-                                <h5>Email</h5>
-                                <p class="text-muted">your@email.com</p>
+                                <i class="fas fa-envelope fa-2x text-primary mb-2"></i>
+                                <h6 class="mb-1">Email</h6>
+                                <p class="text-muted small mb-0">ngariomumanyi@gmail.com</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 text-center mb-4">
-                        <div class="card h-100">
+                    <div class="col-10 col-sm-6 col-md-4 col-lg-3 mb-3">
+                        <div class="card contact-info-card text-center h-100">
                             <div class="card-body">
-                                <i class="fas fa-phone fa-3x text-primary mb-3"></i>
-                                <h5>Phone</h5>
-                                <p class="text-muted">+254 123 456 789</p>
+                                <i class="fas fa-phone fa-2x text-primary mb-2"></i>
+                                <h6 class="mb-1">Phone</h6>
+                                <p class="text-muted small mb-0">+254796349982</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 text-center mb-4">
-                        <div class="card h-100">
+                    <div class="col-10 col-sm-6 col-md-4 col-lg-3 mb-3">
+                        <div class="card contact-info-card text-center h-100">
                             <div class="card-body">
-                                <i class="fas fa-map-marker-alt fa-3x text-primary mb-3"></i>
-                                <h5>Location</h5>
-                                <p class="text-muted">Nairobi, Kenya</p>
+                                <i class="fas fa-map-marker-alt fa-2x text-primary mb-2"></i>
+                                <h6 class="mb-1">Location</h6>
+                                <p class="text-muted small mb-0">Nairobi, Kenya</p>
                             </div>
                         </div>
                     </div>
