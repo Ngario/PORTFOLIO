@@ -23,18 +23,13 @@
 # -----------------------------------------------------------------------------
 # FROM = "Start from this existing image"
 #
-# php:8.1-apache means:
-#   - Official PHP image from Docker Hub (hub.docker.com)
-#   - Version 8.1 (matches your composer.json "php": "^8.1")
-#   - Variant "apache" = PHP + Apache web server pre-installed
+# php:8.2-apache = Official PHP 8.2 + Apache image.
+# Your composer.lock pins laminas/laminas-escaper 2.18.0 which requires PHP 8.2+.
+# composer.json "php": "^8.1" allows 8.2, so this image is compatible.
 #
-# Why Apache? CodeIgniter uses .htaccess for URL rewriting. Apache reads
-# .htaccess; PHP's built-in server does not. So we use Apache.
-#
-# This line creates the first "layer" of your image. Everything after
-# builds on top of this.
+# Why Apache? CodeIgniter uses .htaccess for URL rewriting.
 # -----------------------------------------------------------------------------
-FROM php:8.1-apache
+FROM php:8.2-apache
 
 # -----------------------------------------------------------------------------
 # STEP 1.5: Install required PHP extensions for CodeIgniter 4
