@@ -23,11 +23,10 @@ class App extends BaseConfig
     public function __construct()
     {
         parent::__construct();
-        $baseURL = env('app.baseURL');
-        if ($baseURL !== false && $baseURL !== '') {
-            $this->baseURL = $baseURL;
+        $baseURL = env('app.baseURL') ?: env('APP_BASEURL');
+        if ($baseURL !== false && $baseURL !== null && $baseURL !== '') {
+            $this->baseURL = rtrim($baseURL, '/') . '/';
         }
-        // Force HTTPS in production (e.g. Render)
         if (ENVIRONMENT === 'production') {
             $this->forceGlobalSecureRequests = true;
         }

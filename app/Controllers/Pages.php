@@ -11,6 +11,23 @@ namespace App\Controllers;
 class Pages extends BaseController
 {
     /**
+     * Show last fatal error from writable/logs/last-fatal.txt (for Render 500 debugging).
+     * Visit /render-debug after a 500 to see the saved error. Remove route when done.
+     */
+    public function renderDebug()
+    {
+        $file = WRITEPATH . 'logs' . DIRECTORY_SEPARATOR . 'last-fatal.txt';
+        if (! is_file($file)) {
+            return $this->response->setBody('No saved fatal error. Trigger a 500 on the homepage first.')
+                ->setStatusCode(404);
+        }
+        $body = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Last fatal</title></head><body>';
+        $body .= '<h1>Last fatal error (saved)</h1><pre>' . htmlspecialchars(file_get_contents($file)) . '</pre>';
+        $body .= '<p><a href="' . base_url() . '">Home</a></p></body></html>';
+        return $this->response->setBody($body)->setStatusCode(200);
+    }
+
+    /**
      * About Page
      * 
      * URL: /about

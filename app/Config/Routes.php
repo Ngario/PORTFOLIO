@@ -7,6 +7,11 @@ use CodeIgniter\Router\RouteCollection;
  */
 
 // ============================================
+// DEBUG (last fatal error – remove in production when done)
+// ============================================
+$routes->get('render-debug', 'Pages::renderDebug');
+
+// ============================================
 // HOMEPAGE
 // ============================================
 $routes->get('/', 'Home::index');

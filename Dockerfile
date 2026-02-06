@@ -71,6 +71,9 @@ RUN set -eux; \
 # -----------------------------------------------------------------------------
 RUN a2enmod rewrite
 
+# Suppress "Could not reliably determine server's FQDN" warning (cosmetic only).
+RUN echo 'ServerName localhost' >> /etc/apache2/apache2.conf
+
 # -----------------------------------------------------------------------------
 # STEP 3: Set Apache's document root to /var/www/html/public
 # -----------------------------------------------------------------------------
