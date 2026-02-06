@@ -26,10 +26,35 @@ class App extends BaseConfig
         $baseURL = env('app.baseURL') ?: env('APP_BASEURL');
         if ($baseURL !== false && $baseURL !== null && $baseURL !== '') {
             $this->baseURL = rtrim($baseURL, '/') . '/';
+        } else {
+            $this->baseURL = $this->detectBaseURL();
+        }
+        // When host is localhost, always use detected protocol so http/https matches the request (fixes mobile CSS and links).
+        if (strpos($this->baseURL, 'localhost') !== false) {
+            $this->baseURL = $this->detectBaseURL();
         }
         if (ENVIRONMENT === 'production') {
             $this->forceGlobalSecureRequests = true;
         }
+    }
+
+    /**
+     * Detect base URL from current request (protocol + host + path).
+     * Used when app.baseURL is not set so localhost works with both http and https.
+     */
+    private function detectBaseURL(): string
+    {
+        $https = (! empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || (! empty($_SERVER['REQUEST_SCHEME']) && $_SERVER['REQUEST_SCHEME'] === 'https')
+            || (! empty($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] === 443);
+        $protocol = $https ? 'https' : 'http';
+        $host    = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        $script  = $_SERVER['SCRIPT_NAME'] ?? '/index.php';
+        $basePath = str_replace('\\', '/', dirname($script));
+        if ($basePath === '/' || $basePath === '') {
+            $basePath = '';
+        }
+        return $protocol . '://' . $host . $basePath . '/';
     }
 
     /**

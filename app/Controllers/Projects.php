@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Models\ProjectModel;
+
 /**
  * Projects Controller
  *
@@ -9,8 +11,8 @@ namespace App\Controllers;
  *   GET /projects         → index()  = list all projects
  *   GET /projects/123     → view(123) = single project by ID
  *
- * Later you will load real data from a Project model and the projects table.
- * For now we use placeholder data so the pages render.
+ * Uses ProjectModel when the `projects` table exists (after "php spark migrate").
+ * Falls back to placeholder data otherwise so the site still works.
  */
 class Projects extends BaseController
 {
@@ -20,8 +22,10 @@ class Projects extends BaseController
      */
     public function index()
     {
-        // TODO: Replace with: $projectModel = model('ProjectModel'); $projects = $projectModel->findAll();
-        $projects = $this->getPlaceholderProjects();
+        $projects = $this->getProjectsFromDb();
+        if ($projects === null) {
+            $projects = $this->getPlaceholderProjects();
+        }
 
         $data = [
             'title'       => 'My Projects',
@@ -39,12 +43,15 @@ class Projects extends BaseController
      */
     public function view(int $id)
     {
-        $projects = $this->getPlaceholderProjects();
-        $project  = null;
-        foreach ($projects as $p) {
-            if ((int) $p['id'] === $id) {
-                $project = $p;
-                break;
+        $project = $this->getProjectFromDb($id);
+        if ($project === null) {
+            $projects = $this->getPlaceholderProjects();
+            $project  = null;
+            foreach ($projects as $p) {
+                if ((int) $p['id'] === $id) {
+                    $project = $p;
+                    break;
+                }
             }
         }
 
@@ -61,7 +68,39 @@ class Projects extends BaseController
     }
 
     /**
-     * Placeholder data until you connect a Project model and database.
+     * Load all projects from the database (ProjectModel).
+     * Returns null if the table doesn't exist or an error occurs.
+     *
+     * @return array<int, array<string, mixed>>|null
+     */
+    private function getProjectsFromDb(): ?array
+    {
+        try {
+            $model = model(ProjectModel::class);
+            return $model->getProjects();
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
+    /**
+     * Load one project by ID from the database.
+     * Returns null if not found or table doesn't exist.
+     *
+     * @return array<string, mixed>|null
+     */
+    private function getProjectFromDb(int $id): ?array
+    {
+        try {
+            $model = model(ProjectModel::class);
+            return $model->getProject($id);
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
+    /**
+     * Placeholder data when the database table doesn't exist yet.
      * @return array<int, array<string, mixed>>
      */
     private function getPlaceholderProjects(): array

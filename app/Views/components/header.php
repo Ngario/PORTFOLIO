@@ -4,12 +4,12 @@
     Responsive: Collapses to hamburger menu on mobile
 -->
 
-<!-- 
-    helper('url') loads CodeIgniter's URL helper
-    This gives us functions like current_url(), base_url(), etc.
--->
-<?php helper('url'); ?>
-
+<?php
+helper('url');
+// Use path instead of full URL so it works on mobile and with http/https or different ports
+$uri = uri_string();
+$isHomePage = ($uri === '' || $uri === '/');
+?>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
     <!-- 
         navbar-expand-lg: Collapse on screens smaller than 992px
@@ -53,26 +53,23 @@
                 
                 <!-- HOME LINK -->
                 <li class="nav-item">
-                    <a class="nav-link <?= current_url() === base_url('/') ? 'active' : '' ?>" 
-                       href="<?= base_url('/') ?>">
+                    <a class="nav-link <?= $isHomePage ? 'active' : '' ?>" href="<?= base_url('/') ?>">
                         <i class="fas fa-home me-1"></i> Home
                     </a>
                 </li>
                 
-                <!-- ABOUT LINK - Smart Navigation -->
-                <!-- On homepage: Scrolls to #about section -->
-                <!-- On other pages: Goes to /about page -->
+                <!-- ABOUT: on homepage scroll to #about, else go to home#about -->
                 <li class="nav-item">
-                    <a class="nav-link <?= current_url() === base_url('about') ? 'active' : '' ?>" 
-                       href="<?= current_url() === base_url('/') ? '#about' : base_url('/#about') ?>">
+                    <a class="nav-link <?= $uri === 'about' ? 'active' : '' ?>" 
+                       href="<?= $isHomePage ? '#about' : base_url('/#about') ?>">
                         <i class="fas fa-user me-1"></i> About
                     </a>
                 </li>
                 
-                <!-- PROJECTS LINK - Smart Navigation -->
+                <!-- PROJECTS: on homepage scroll to #projects, else go to projects page or home#projects -->
                 <li class="nav-item">
-                    <a class="nav-link <?= current_url() === base_url('projects') ? 'active' : '' ?>" 
-                       href="<?= current_url() === base_url('/') ? '#projects' : base_url('/#projects') ?>">
+                    <a class="nav-link <?= $uri === 'projects' ? 'active' : '' ?>" 
+                       href="<?= $isHomePage ? '#projects' : base_url('projects') ?>">
                         <i class="fas fa-folder-open me-1"></i> Projects
                     </a>
                 </li>
@@ -97,25 +94,25 @@
                     </ul>
                 </li>
                 
-                <!-- SERVICES LINK - Smart Navigation -->
+                <!-- SERVICES -->
                 <li class="nav-item">
-                    <a class="nav-link <?= current_url() === base_url('services') ? 'active' : '' ?>" 
-                       href="<?= current_url() === base_url('/') ? '#services' : base_url('/#services') ?>">
+                    <a class="nav-link <?= $uri === 'services' ? 'active' : '' ?>" 
+                       href="<?= $isHomePage ? '#services' : base_url('services') ?>">
                         <i class="fas fa-briefcase me-1"></i> Services
                     </a>
                 </li>
                 
-                <!-- BLOG LINK - Smart Navigation -->
+                <!-- BLOG -->
                 <li class="nav-item">
-                    <a class="nav-link <?= current_url() === base_url('blog') ? 'active' : '' ?>" 
-                       href="<?= current_url() === base_url('/') ? '#blogs' : base_url('/#blogs') ?>">
+                    <a class="nav-link <?= $uri === 'blog' ? 'active' : '' ?>" 
+                       href="<?= $isHomePage ? '#blogs' : base_url('blog') ?>">
                         <i class="fas fa-blog me-1"></i> Blog
                     </a>
                 </li>
                 
-                <!-- CONTACT LINK - Goes to separate contact page -->
+                <!-- CONTACT -->
                 <li class="nav-item">
-                    <a class="nav-link <?= current_url() === base_url('contact') ? 'active' : '' ?>" 
+                    <a class="nav-link <?= $uri === 'contact' ? 'active' : '' ?>" 
                        href="<?= base_url('contact') ?>">
                         <i class="fas fa-envelope me-1"></i> Contact
                     </a>
