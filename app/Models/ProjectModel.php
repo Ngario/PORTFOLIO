@@ -13,7 +13,9 @@ use CodeIgniter\Model;
  * - Update: $this->update($id, $data)
  * - Delete: $this->delete($id)
  *
- * Table must exist: run "php spark migrate" to create it.
+ * Table must exist in your database (created by migrations OR already created by you).
+ * Tip: run "php spark db:show-tables" to see your table + columns, then ensure
+ * $table and $allowedFields match your real schema.
  */
 class ProjectModel extends Model
 {

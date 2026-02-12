@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Models\BlogPostModel;
+
 /**
  * Blog Controller
  *
@@ -10,7 +12,8 @@ namespace App\Controllers;
  *   GET /blog/my-post-slug       → view('my-post-slug') = single post by slug
  *   GET /blog/category/tech      → category('tech') = posts in that category
  *
- * Later: load from Blog/Post model and blog_posts table.
+ * Uses BlogPostModel when the posts table exists.
+ * Falls back to placeholder data otherwise so the site still works.
  */
 class Blog extends BaseController
 {
@@ -20,7 +23,10 @@ class Blog extends BaseController
      */
     public function index()
     {
-        $posts = $this->getPlaceholderPosts();
+        $posts = $this->getPostsFromDb();
+        if ($posts === null) {
+            $posts = $this->getPlaceholderPosts();
+        }
 
         $data = [
             'title'       => 'Blog',
@@ -42,17 +48,34 @@ class Blog extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        $posts = $this->getPlaceholderPosts();
-        $post  = null;
-        foreach ($posts as $p) {
-            if (($p['slug'] ?? '') === $slug) {
-                $post = $p;
-                break;
-            }
+        $post = null;
+        $dbOk = false;
+
+        try {
+            $model = model(BlogPostModel::class);
+            $dbOk  = true;
+            $post  = $model->getBySlug($slug);
+        } catch (\Throwable) {
+            $dbOk = false;
         }
 
-        if ($post === null) {
+        // If DB is working but record doesn't exist, it's a real 404.
+        if ($dbOk && $post === null) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        // If DB isn't available, fall back to placeholder data.
+        if (!$dbOk) {
+            $posts = $this->getPlaceholderPosts();
+            foreach ($posts as $p) {
+                if (($p['slug'] ?? '') === $slug) {
+                    $post = $p;
+                    break;
+                }
+            }
+            if ($post === null) {
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            }
         }
 
         $data = [
@@ -69,11 +92,14 @@ class Blog extends BaseController
      */
     public function category(string $category)
     {
-        $allPosts = $this->getPlaceholderPosts();
-        $posts    = array_filter($allPosts, static function ($p) use ($category) {
-            return strtolower($p['category'] ?? '') === strtolower($category);
-        });
-        $posts = array_values($posts);
+        $posts = $this->getPostsByCategoryFromDb($category);
+        if ($posts === null) {
+            $allPosts = $this->getPlaceholderPosts();
+            $posts    = array_filter($allPosts, static function ($p) use ($category) {
+                return strtolower($p['category'] ?? '') === strtolower($category);
+            });
+            $posts = array_values($posts);
+        }
 
         $data = [
             'title'       => 'Blog - ' . ucfirst($category),
@@ -83,6 +109,38 @@ class Blog extends BaseController
         ];
 
         return view('blog/category', $data);
+    }
+
+    /**
+     * Load all posts from the database.
+     * Returns null only when the DB/table is not available.
+     *
+     * @return array<int, array<string, mixed>>|null
+     */
+    private function getPostsFromDb(): ?array
+    {
+        try {
+            $model = model(BlogPostModel::class);
+            return $model->getPosts();
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
+    /**
+     * Load posts for a category from the database.
+     * Returns null only when the DB/table is not available.
+     *
+     * @return array<int, array<string, mixed>>|null
+     */
+    private function getPostsByCategoryFromDb(string $category): ?array
+    {
+        try {
+            $model = model(BlogPostModel::class);
+            return $model->getByCategory($category);
+        } catch (\Throwable) {
+            return null;
+        }
     }
 
     private function getPlaceholderPosts(): array

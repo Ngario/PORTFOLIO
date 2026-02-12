@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Models\ServiceModel;
+
 /**
  * Services Controller
  *
@@ -9,13 +11,17 @@ namespace App\Controllers;
  *   GET /services       → index()  = list all services
  *   GET /services/123   → view(123) = single service by ID
  *
- * Later: load from Service model and services table.
+ * Uses ServiceModel when the `services` table exists.
+ * Falls back to placeholder data otherwise so the site still works.
  */
 class Services extends BaseController
 {
     public function index()
     {
-        $services = $this->getPlaceholderServices();
+        $services = $this->getServicesFromDb();
+        if ($services === null) {
+            $services = $this->getPlaceholderServices();
+        }
 
         $data = [
             'title'       => 'Services',
@@ -32,17 +38,34 @@ class Services extends BaseController
      */
     public function view(int $id)
     {
-        $services = $this->getPlaceholderServices();
-        $service  = null;
-        foreach ($services as $s) {
-            if ((int) $s['id'] === $id) {
-                $service = $s;
-                break;
-            }
+        $service = null;
+        $dbOk    = false;
+
+        try {
+            $model  = model(ServiceModel::class);
+            $dbOk   = true;
+            $service = $model->getService($id);
+        } catch (\Throwable) {
+            $dbOk = false;
         }
 
-        if ($service === null) {
+        // If DB is working but record doesn't exist, it's a real 404.
+        if ($dbOk && $service === null) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        // If DB isn't available, fall back to placeholder data.
+        if (!$dbOk) {
+            $services = $this->getPlaceholderServices();
+            foreach ($services as $s) {
+                if ((int) $s['id'] === $id) {
+                    $service = $s;
+                    break;
+                }
+            }
+            if ($service === null) {
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            }
         }
 
         $data = [
@@ -51,6 +74,22 @@ class Services extends BaseController
         ];
 
         return view('services/view', $data);
+    }
+
+    /**
+     * Load all services from the database (ServiceModel).
+     * Returns null only when the DB/table is not available.
+     *
+     * @return array<int, array<string, mixed>>|null
+     */
+    private function getServicesFromDb(): ?array
+    {
+        try {
+            $model = model(ServiceModel::class);
+            return $model->getServices();
+        } catch (\Throwable) {
+            return null;
+        }
     }
 
     private function getPlaceholderServices(): array

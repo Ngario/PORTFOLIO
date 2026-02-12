@@ -35,7 +35,20 @@ The model class tells CodeIgniter:
 
 - **Database config** is in `app/Config/Database.php` (host, user, password, database name). It uses the `default` connection (e.g. MySQL).
 - When you use a model (e.g. `model('ProjectModel')`), CodeIgniter creates a **database connection** from that config and the model runs queries on the **table** you set (e.g. `projects`).
-- So: **config** → **connection** → **model** → **table**. The table must exist (create it with **migrations** or by hand in MySQL).
+- So: **config** → **connection** → **model** → **table**.
+
+### Important: “table must exist”
+
+You have **two valid ways** to make sure the table exists:
+
+- **Migrations way (schema in code):** create/alter tables using migrations (recommended when you want the database structure versioned in your project).
+- **Existing tables way (schema already in MySQL):** if you already created tables manually, you do **not** need migrations to create them again. You just make sure each model’s `$table` and `$allowedFields` match your real MySQL table and columns.
+
+Tip: this project includes a command that prints your real schema:
+
+```bash
+php spark db:show-tables
+```
 
 ---
 

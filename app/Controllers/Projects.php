@@ -43,20 +43,34 @@ class Projects extends BaseController
      */
     public function view(int $id)
     {
-        $project = $this->getProjectFromDb($id);
-        if ($project === null) {
+        $project = null;
+        $dbOk    = false;
+
+        try {
+            $model  = model(ProjectModel::class);
+            $dbOk   = true;
+            $project = $model->getProject($id);
+        } catch (\Throwable) {
+            $dbOk = false;
+        }
+
+        // If DB is working but record doesn't exist, it's a real 404.
+        if ($dbOk && $project === null) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        // If DB isn't available, fall back to placeholder data.
+        if (!$dbOk) {
             $projects = $this->getPlaceholderProjects();
-            $project  = null;
             foreach ($projects as $p) {
                 if ((int) $p['id'] === $id) {
                     $project = $p;
                     break;
                 }
             }
-        }
-
-        if ($project === null) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            if ($project === null) {
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            }
         }
 
         $data = [
