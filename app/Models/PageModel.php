@@ -5,10 +5,8 @@ namespace App\Models;
 use CodeIgniter\Model;
 
 /**
- * PageModel
- *
- * Optional model if you want pages (Terms/Privacy/About/etc) to come from the DB.
- * This points to YOUR existing `pages` table (or whatever you named it).
+ * PageModel – matches your `pages` table.
+ * Columns: id, slug, title, content, published, created_at, updated_at
  */
 class PageModel extends Model
 {
@@ -17,19 +15,15 @@ class PageModel extends Model
     protected $useAutoIncrement = true;
     protected $returnType = 'array';
 
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $createdField = 'created_at';
     protected $updatedField = 'updated_at';
 
-    /**
-     * Replace with your exact columns from `php spark db:show-tables` / DESCRIBE.
-     */
     protected $allowedFields = [
-        'title',
         'slug',
+        'title',
         'content',
-        'meta_description',
-        'is_published',
+        'published',
     ];
 
     /**

@@ -76,19 +76,18 @@ If your table has **different** column names (e.g. `description` instead of `bod
 
 ---
 
-## 4. Models already in the project
+## 4. Models wired to your schema (already done)
 
-| Model           | File                     | Default table   | What to do |
-|----------------|--------------------------|-----------------|------------|
-| **ProjectModel**  | `app/Models/ProjectModel.php`   | `projects`      | Set `$table` to your table name; set `$allowedFields` to your column names (see your `DESCRIBE projects` or `db:show-tables` output). If you have no `tech_stack` column, remove it from `$allowedFields` and from any code that uses it. |
-| **ServiceModel**  | `app/Models/ServiceModel.php`   | `services`      | Set `$table` and `$allowedFields` to match your `services` table. |
-| **BlogPostModel** | `app/Models/BlogPostModel.php`  | `blog_posts`    | Set `$table` and `$allowedFields` to match your blog table (might be `blog_posts`, `blogs`, or something else). |
-| **PageModel**     | `app/Models/PageModel.php`      | `pages`         | Set `$table` and `$allowedFields` to match your `pages` table. |
+These models are already aligned with the tables you listed:
 
-After you run `php spark db:show-tables` (or `DESCRIBE` in MySQL), edit each model so that:
+| Table         | Model           | File                         | Columns used |
+|---------------|-----------------|------------------------------|---------------|
+| **projects**  | ProjectModel    | `app/Models/ProjectModel.php`   | id, title, slug, description, tech_stack, demo_url, github_url, featured, created_at |
+| **services**  | ServiceModel    | `app/Models/ServiceModel.php`   | id, name, description, price, is_active, created_at. List only shows rows where `is_active = 1`. |
+| **blog_posts**| BlogPostModel   | `app/Models/BlogPostModel.php`  | id, title, slug, content, author_id, status, published_at, created_at. Joins **users** (author name) and **blog_post_category** + **blog_categories** (categories). Only `status = 'published'` is shown. |
+| **pages**     | PageModel       | `app/Models/PageModel.php`     | id, slug, title, content, published, created_at, updated_at |
 
-- `$table` = your real table name.
-- `$allowedFields` = your real column names (excluding `id`, and usually `created_at`/`updated_at` if you use timestamps).
+Other tables (users, orders, payments, downloads, contact_messages, etc.) do not have models yet. Add a new model in `app/Models/` and set `$table` and `$allowedFields` to match when you need them.
 
 ---
 

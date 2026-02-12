@@ -34,13 +34,9 @@
                 <div class="col-md-6 col-lg-4">
                     <article class="card h-100 shadow-sm border-0 overflow-hidden">
                         <a href="<?= base_url('blog/' . ($post['slug'] ?? $post['id'])) ?>" class="text-decoration-none text-dark">
-                            <img src="<?= base_url('images/' . ($post['image'] ?? 'blog/placeholder.jpg')) ?>" 
-                                 class="card-img-top" 
-                                 alt="<?= esc($post['title']) ?>"
-                                 style="height: 180px; object-fit: cover;">
                             <div class="card-body">
                                 <h5 class="card-title"><?= esc($post['title']) ?></h5>
-                                <p class="card-text text-muted small"><?= esc($post['excerpt']) ?></p>
+                                <p class="card-text text-muted small"><?= esc($post['excerpt'] ?? '') ?></p>
                                 <span class="text-primary small fw-bold">Read more &rarr;</span>
                             </div>
                         </a>

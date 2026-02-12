@@ -17,6 +17,35 @@ $routes->get('render-debug', 'Pages::renderDebug');
 $routes->get('/', 'Home::index');
 
 // ============================================
+// ADMIN DASHBOARD (login + protected CRUD)
+// ============================================
+// Login routes are NOT protected (otherwise you can never reach them)
+$routes->get('admin/login', 'Admin\\Auth::login');
+$routes->post('admin/login', 'Admin\\Auth::attemptLogin');
+$routes->get('admin/logout', 'Admin\\Auth::logout');
+
+// Everything else under /admin is protected by the adminauth filter
+$routes->group('admin', ['filter' => 'adminauth'], static function ($routes) {
+    $routes->get('/', 'Admin\\Dashboard::index');
+
+    // Projects CRUD
+    $routes->get('projects', 'Admin\\Projects::index');
+    $routes->get('projects/new', 'Admin\\Projects::new');
+    $routes->post('projects', 'Admin\\Projects::create');
+    $routes->get('projects/(:num)/edit', 'Admin\\Projects::edit/$1');
+    $routes->post('projects/(:num)', 'Admin\\Projects::update/$1');
+    $routes->post('projects/(:num)/delete', 'Admin\\Projects::delete/$1');
+
+    // Blog posts CRUD
+    $routes->get('blog-posts', 'Admin\\BlogPosts::index');
+    $routes->get('blog-posts/new', 'Admin\\BlogPosts::new');
+    $routes->post('blog-posts', 'Admin\\BlogPosts::create');
+    $routes->get('blog-posts/(:num)/edit', 'Admin\\BlogPosts::edit/$1');
+    $routes->post('blog-posts/(:num)', 'Admin\\BlogPosts::update/$1');
+    $routes->post('blog-posts/(:num)/delete', 'Admin\\BlogPosts::delete/$1');
+});
+
+// ============================================
 // STATIC PAGES (About, Contact, Terms, Privacy)
 // ============================================
 $routes->get('about', 'Pages::about');

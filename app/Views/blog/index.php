@@ -25,14 +25,10 @@
             <div class="col-md-6 col-lg-4">
                 <article class="card h-100 shadow-sm border-0 overflow-hidden">
                     <a href="<?= base_url('blog/' . ($post['slug'] ?? $post['id'])) ?>" class="text-decoration-none text-dark">
-                        <img src="<?= base_url('images/' . ($post['image'] ?? 'blog/placeholder.jpg')) ?>" 
-                             class="card-img-top" 
-                             alt="<?= esc($post['title']) ?>"
-                             style="height: 180px; object-fit: cover;">
                         <div class="card-body">
                             <span class="badge bg-secondary mb-2"><?= esc(ucfirst($post['category'] ?? 'Uncategorized')) ?></span>
                             <h5 class="card-title"><?= esc($post['title']) ?></h5>
-                            <p class="card-text text-muted small"><?= esc($post['excerpt']) ?></p>
+                            <p class="card-text text-muted small"><?= esc($post['excerpt'] ?? '') ?></p>
                             <?php if (! empty($post['published_at'])): ?>
                                 <p class="small text-muted mb-0"><?= esc($post['published_at']) ?></p>
                             <?php endif ?>

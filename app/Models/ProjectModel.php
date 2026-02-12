@@ -31,28 +31,24 @@ class ProjectModel extends Model
     /** @var string Return type: array or object */
     protected $returnType = 'array';
 
-    /** @var bool Use created_at and updated_at */
-    protected $useTimestamps = true;
-
-    /** @var string Created at column */
+    /**
+     * Your table has created_at but no updated_at, so we don't auto-set timestamps.
+     */
+    protected $useTimestamps = false;
     protected $createdField = 'created_at';
-
-    /** @var string Updated at column */
     protected $updatedField = 'updated_at';
 
     /**
-     * Columns that can be set when inserting or updating.
-     * (id, created_at, updated_at are handled automatically.)
+     * Must match your `projects` table columns (id and created_at handled separately if needed).
      */
     protected $allowedFields = [
         'title',
         'slug',
-        'excerpt',
         'description',
-        'image',
         'tech_stack',
-        'link',
-        'completed_at',
+        'demo_url',
+        'github_url',
+        'featured',
     ];
 
     /**
@@ -74,7 +70,7 @@ class ProjectModel extends Model
      *
      * @return array<int, array<string, mixed>>
      */
-    public function getProjects(string $orderBy = 'created_at', string $direction = 'DESC'): array
+    public function getProjects(string $orderBy = 'id', string $direction = 'DESC'): array
     {
         $rows = $this->orderBy($orderBy, $direction)->findAll();
         return array_map([$this, 'decodeTechStack'], $rows);

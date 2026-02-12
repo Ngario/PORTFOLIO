@@ -5,13 +5,8 @@ namespace App\Models;
 use CodeIgniter\Model;
 
 /**
- * ServiceModel
- *
- * This model is meant to point to YOUR existing services table.
- *
- * After you run: php spark db:show-tables
- * 1) Set $table to your real table name (maybe "services")
- * 2) Update $allowedFields so it matches your real column names
+ * ServiceModel – matches your `services` table.
+ * Columns: id, name, description, price, is_active, created_at
  */
 class ServiceModel extends Model
 {
@@ -20,25 +15,16 @@ class ServiceModel extends Model
     protected $useAutoIncrement = true;
     protected $returnType = 'array';
 
-    /**
-     * Keep this OFF by default because your existing table might not have
-     * created_at/updated_at columns. Turn it on only if your table has them.
-     */
+    /** Your table has created_at but no updated_at. */
     protected $useTimestamps = false;
     protected $createdField = 'created_at';
     protected $updatedField = 'updated_at';
 
-    /**
-     * IMPORTANT: Replace these with the exact columns in your table.
-     * These match what the current services pages expect.
-     */
     protected $allowedFields = [
-        'title',
-        'slug',
-        'excerpt',
+        'name',
         'description',
-        'icon',
-        'price_from',
+        'price',
+        'is_active',
     ];
 
     /**
@@ -46,7 +32,7 @@ class ServiceModel extends Model
      */
     public function getServices(string $orderBy = 'id', string $direction = 'ASC'): array
     {
-        return $this->orderBy($orderBy, $direction)->findAll();
+        return $this->where('is_active', 1)->orderBy($orderBy, $direction)->findAll();
     }
 
     /**

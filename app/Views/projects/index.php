@@ -27,13 +27,13 @@
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100 shadow-sm border-0 overflow-hidden">
                     <a href="<?= base_url('projects/' . $project['id']) ?>" class="text-decoration-none text-dark">
-                        <img src="<?= base_url('images/' . ($project['image'] ?? 'projects/placeholder.jpg')) ?>" 
-                             class="card-img-top" 
-                             alt="<?= esc($project['title']) ?>"
-                             style="height: 200px; object-fit: cover;">
                         <div class="card-body">
                             <h5 class="card-title"><?= esc($project['title']) ?></h5>
-                            <p class="card-text text-muted small"><?= esc($project['excerpt']) ?></p>
+                            <?php
+                            $excerpt = isset($project['description']) ? mb_substr(strip_tags($project['description']), 0, 120) : '';
+                            if (mb_strlen($project['description'] ?? '') > 120) { $excerpt .= '…'; }
+                            ?>
+                            <p class="card-text text-muted small"><?= esc($excerpt) ?></p>
                             <?php if (! empty($project['tech_stack'])): ?>
                                 <div class="mb-2">
                                     <?php foreach (array_slice($project['tech_stack'], 0, 3) as $tech): ?>

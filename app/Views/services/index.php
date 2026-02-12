@@ -26,12 +26,13 @@
                 <div class="card h-100 shadow-sm border-0 text-center">
                     <div class="card-body py-4">
                         <div class="mb-3">
-                            <i class="<?= esc($service['icon'] ?? 'fas fa-cog') ?> fa-3x text-primary"></i>
+                            <i class="fas fa-cog fa-3x text-primary"></i>
                         </div>
-                        <h5 class="card-title"><?= esc($service['title']) ?></h5>
-                        <p class="card-text text-muted small"><?= esc($service['excerpt']) ?></p>
-                        <?php if (! empty($service['price_from'])): ?>
-                            <p class="small fw-bold text-primary mb-2"><?= esc($service['price_from']) ?></p>
+                        <h5 class="card-title"><?= esc($service['name']) ?></h5>
+                        <?php $short = isset($service['description']) ? mb_substr(strip_tags($service['description']), 0, 100) : ''; if (mb_strlen($service['description'] ?? '') > 100) { $short .= '…'; } ?>
+                        <p class="card-text text-muted small"><?= esc($short) ?></p>
+                        <?php if (isset($service['price']) && $service['price'] !== null && $service['price'] !== ''): ?>
+                            <p class="small fw-bold text-primary mb-2"><?= esc($service['price']) ?></p>
                         <?php endif ?>
                         <a href="<?= base_url('services/' . $service['id']) ?>" class="btn btn-outline-primary btn-sm">Learn more</a>
                     </div>
