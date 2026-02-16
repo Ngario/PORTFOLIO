@@ -159,7 +159,12 @@ Welcome to my professional portfolio. Explore my projects, services, downloads, 
                     <div class="col-md-6 col-lg-4 animate-on-scroll">
                         <div class="card custom-card project-card">
                             <!-- Project Image -->
-                            <img src="<?= esc($project['thumbnail'] ?? 'https://via.placeholder.com/400x250?text=Project') ?>" 
+                            <?php
+                                    $cardImg = ! empty($project['image'])
+                                        ? base_url('uploads/' . $project['image'])
+                                        : ($project['thumbnail'] ?? 'https://via.placeholder.com/400x250?text=Project');
+                                ?>
+                            <img src="<?= esc($cardImg) ?>" 
                                  class="card-img-top" 
                                  alt="<?= esc($project['title']) ?>">
                             

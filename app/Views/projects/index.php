@@ -26,7 +26,13 @@
             <?php foreach ($projects as $project): ?>
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100 shadow-sm border-0 overflow-hidden">
+                    <?php
+                    $cardImg = ! empty($project['image'])
+                        ? base_url('uploads/' . $project['image'])
+                        : 'https://via.placeholder.com/400x250?text=Project';
+                    ?>
                     <a href="<?= base_url('projects/' . $project['id']) ?>" class="text-decoration-none text-dark">
+                        <img src="<?= esc($cardImg) ?>" class="card-img-top" alt="<?= esc($project['title']) ?>" style="object-fit: cover; height: 200px;">
                         <div class="card-body">
                             <h5 class="card-title"><?= esc($project['title']) ?></h5>
                             <?php

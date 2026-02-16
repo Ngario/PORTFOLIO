@@ -83,7 +83,7 @@ class Projects extends BaseController
 
     /**
      * Load all projects from the database (ProjectModel).
-     * Returns null if the table doesn't exist or an error occurs.
+     * Featured projects are listed first, then by id DESC.
      *
      * @return array<int, array<string, mixed>>|null
      */
@@ -91,7 +91,7 @@ class Projects extends BaseController
     {
         try {
             $model = model(ProjectModel::class);
-            return $model->getProjects();
+            return $model->getProjectsFeaturedFirst();
         } catch (\Throwable) {
             return null;
         }

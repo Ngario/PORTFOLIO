@@ -75,6 +75,11 @@ class Projects extends BaseController
             return redirect()->back()->withInput()->with('error', 'Title and slug are required.');
         }
 
+        $imagePath = $this->handleProjectImageUpload();
+        if ($imagePath !== null) {
+            $data['image'] = $imagePath;
+        }
+
         $ok = $model->insert($data) !== false;
         if (! $ok) {
             return redirect()->back()->withInput()->with('error', 'Failed to create project.');
@@ -139,6 +144,11 @@ class Projects extends BaseController
             return redirect()->back()->withInput()->with('error', 'Title and slug are required.');
         }
 
+        $imagePath = $this->handleProjectImageUpload();
+        if ($imagePath !== null) {
+            $data['image'] = $imagePath;
+        }
+
         $ok = (bool) $model->update($id, $data);
         if (! $ok) {
             return redirect()->back()->withInput()->with('error', 'Failed to update project.');
@@ -152,6 +162,35 @@ class Projects extends BaseController
         $model = model(ProjectModel::class);
         $model->delete($id);
         return redirect()->to(base_url('admin/projects'))->with('success', 'Project deleted.');
+    }
+
+    /**
+     * Handle optional project image upload. Saves to public/uploads/projects/.
+     * Returns path relative to uploads/ (e.g. 'projects/abc.jpg') or null if no valid file.
+     */
+    private function handleProjectImageUpload(): ?string
+    {
+        $file = $this->request->getFile('image');
+        if ($file === null || ! $file->isValid() || $file->getError() !== UPLOAD_ERR_OK) {
+            return null;
+        }
+
+        $allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (! in_array($file->getMimeType(), $allowed, true)) {
+            return null;
+        }
+
+        $dir = FCPATH . 'uploads' . DIRECTORY_SEPARATOR . 'projects';
+        if (! is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        $newName = $file->getRandomName();
+        if (! $file->hasMoved() && $file->move($dir, $newName)) {
+            return 'projects/' . $newName;
+        }
+
+        return null;
     }
 }
 

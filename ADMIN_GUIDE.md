@@ -38,13 +38,13 @@ You shared your real schema; we updated models to match it.
 ### Projects
 
 - **Table:** `projects`
-- **Columns:** `id, title, slug, description, tech_stack, demo_url, github_url, featured, created_at`
+- **Columns:** `id, title, slug, description, image, tech_stack, demo_url, github_url, featured, created_at`
 - **Model:** `app/Models/ProjectModel.php`
 
 **Key changes:**
-- Removed old fields like `excerpt`, `image`, `link`, `completed_at` (not in your table)
+- `image` — optional card/thumbnail image path (e.g. `projects/abc.jpg`). Upload via admin project form; stored under `public/uploads/projects/`. Shown on homepage Featured Projects, `/projects` list, and single project page.
 - `tech_stack` is stored as JSON in DB (example: `["PHP","MySQL"]`) and decoded for views
-- `useTimestamps` is **off** because your table doesn’t have `updated_at`
+- `useTimestamps` is **off** if your table doesn’t have `updated_at`
 
 ### Services
 

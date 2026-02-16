@@ -45,6 +45,7 @@ class ProjectModel extends Model
         'title',
         'slug',
         'description',
+        'image',
         'tech_stack',
         'demo_url',
         'github_url',
@@ -73,6 +74,28 @@ class ProjectModel extends Model
     public function getProjects(string $orderBy = 'id', string $direction = 'DESC'): array
     {
         $rows = $this->orderBy($orderBy, $direction)->findAll();
+        return array_map([$this, 'decodeTechStack'], $rows);
+    }
+
+    /**
+     * Get projects for the homepage: featured first, then latest. Limit optional.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function getFeaturedForHome(int $limit = 6): array
+    {
+        $rows = $this->orderBy('featured', 'DESC')->orderBy('id', 'DESC')->limit($limit)->findAll();
+        return array_map([$this, 'decodeTechStack'], $rows);
+    }
+
+    /**
+     * Get all projects ordered by featured first, then by id DESC (for /projects page).
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function getProjectsFeaturedFirst(): array
+    {
+        $rows = $this->orderBy('featured', 'DESC')->orderBy('id', 'DESC')->findAll();
         return array_map([$this, 'decodeTechStack'], $rows);
     }
 

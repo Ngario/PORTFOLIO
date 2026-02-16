@@ -14,7 +14,19 @@ $action = $mode === 'edit'
 
 <div class="card">
     <div class="card-body">
-        <form method="post" action="<?= $action ?>">
+        <form method="post" action="<?= $action ?>" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label">Card image</label>
+                <?php if ($mode === 'edit' && ! empty($project['image'])): ?>
+                    <div class="mb-2">
+                        <img src="<?= esc(base_url('uploads/' . $project['image'])) ?>" alt="Current" class="img-fluid rounded" style="max-height: 180px;">
+                        <p class="form-text text-muted small">Current image. Upload a new file to replace.</p>
+                    </div>
+                <?php endif; ?>
+                <input type="file" name="image" class="form-control" accept="image/jpeg,image/png,image/gif,image/webp">
+                <div class="form-text">Optional. JPG, PNG, GIF or WebP. Used on project cards (homepage and projects list).</div>
+            </div>
+
             <div class="mb-3">
                 <label class="form-label">Title</label>
                 <input name="title" class="form-control" value="<?= esc(old('title', $project['title'] ?? '')) ?>" required>

@@ -31,6 +31,9 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 mx-auto">
+                <?php if (! empty($project['image'])): ?>
+                    <img src="<?= esc(base_url('uploads/' . $project['image'])) ?>" class="img-fluid rounded shadow-sm mb-4" alt="<?= esc($project['title']) ?>">
+                <?php endif ?>
                 <div class="mb-4"><?= nl2br(esc($project['description'] ?? '')) ?></div>
                 <?php if (! empty($project['tech_stack'])): ?>
                     <h5 class="mb-2">Tech Stack</h5>

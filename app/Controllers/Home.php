@@ -33,23 +33,14 @@ class Home extends BaseController
         $data = [];
         
         // ============================================
-        // STEP 2: FETCH PROJECTS DATA
+        // STEP 2: FETCH PROJECTS DATA (featured first, then latest)
         // ============================================
-        // TODO: Uncomment when ProjectModel is created
-        /*
-        $projectModel = new \App\Models\ProjectModel();
-        
-        // Get 4 featured or latest projects for homepage
-        $data['projects'] = $projectModel
-            ->where('is_featured', 1)  // Featured projects first
-            ->orWhere('status', 'published')  // Or published projects
-            ->orderBy('created_at', 'DESC')  // Most recent first
-            ->limit(4)  // Only show 4 on homepage
-            ->find();
-        */
-        
-        // For now, pass empty array (view will show placeholders)
-        $data['projects'] = [];
+        try {
+            $projectModel = model(\App\Models\ProjectModel::class);
+            $data['projects'] = $projectModel->getFeaturedForHome(6);
+        } catch (\Throwable) {
+            $data['projects'] = [];
+        }
         
         // ============================================
         // STEP 3: FETCH SERVICES DATA
