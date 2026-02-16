@@ -25,6 +25,15 @@
             </div>
         </div>
     </div>
+    <div class="col-md-6 col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Downloads</h5>
+                <p class="card-text text-muted">Upload ebooks/software and manage categories.</p>
+                <a class="btn btn-primary btn-sm" href="<?= base_url('admin/downloads') ?>">Manage Downloads</a>
+            </div>
+        </div>
+    </div>
 </div>
 <?= $this->endSection() ?>
 

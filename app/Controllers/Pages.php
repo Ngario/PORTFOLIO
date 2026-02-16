@@ -145,4 +145,26 @@ class Pages extends BaseController
         
         return view('pages/privacy', $data);
     }
+
+    /**
+     * Public CV download (FREE for everyone)
+     *
+     * URL: /download-cv
+     *
+     * Put your CV file here:
+     *   public/uploads/cv/cv.pdf
+     *
+     * Then this method will serve it as a download.
+     */
+    public function downloadCv()
+    {
+        $path = FCPATH . 'uploads' . DIRECTORY_SEPARATOR . 'cv' . DIRECTORY_SEPARATOR . 'cv.pdf';
+        $path = realpath($path);
+
+        if ($path === false || ! is_file($path)) {
+            return $this->response->setStatusCode(404)->setBody('CV file not found. Add it to public/uploads/cv/cv.pdf');
+        }
+
+        return $this->response->download($path, null, true);
+    }
 }

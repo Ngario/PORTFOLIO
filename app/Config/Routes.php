@@ -43,6 +43,21 @@ $routes->group('admin', ['filter' => 'adminauth'], static function ($routes) {
     $routes->get('blog-posts/(:num)/edit', 'Admin\\BlogPosts::edit/$1');
     $routes->post('blog-posts/(:num)', 'Admin\\BlogPosts::update/$1');
     $routes->post('blog-posts/(:num)/delete', 'Admin\\BlogPosts::delete/$1');
+
+    // Downloads + Categories
+    $routes->get('downloads', 'Admin\\Downloads::index');
+    $routes->get('downloads/new', 'Admin\\Downloads::new');
+    $routes->post('downloads', 'Admin\\Downloads::create');
+    $routes->get('downloads/(:num)/edit', 'Admin\\Downloads::edit/$1');
+    $routes->post('downloads/(:num)', 'Admin\\Downloads::update/$1');
+    $routes->post('downloads/(:num)/delete', 'Admin\\Downloads::delete/$1');
+
+    $routes->get('download-categories', 'Admin\\DownloadCategories::index');
+    $routes->get('download-categories/new', 'Admin\\DownloadCategories::new');
+    $routes->post('download-categories', 'Admin\\DownloadCategories::create');
+    $routes->get('download-categories/(:num)/edit', 'Admin\\DownloadCategories::edit/$1');
+    $routes->post('download-categories/(:num)', 'Admin\\DownloadCategories::update/$1');
+    $routes->post('download-categories/(:num)/delete', 'Admin\\DownloadCategories::delete/$1');
 });
 
 // ============================================
@@ -53,6 +68,7 @@ $routes->get('contact', 'Pages::contact');
 $routes->post('contact/send', 'Pages::sendMessage');  // Form submission
 $routes->get('terms', 'Pages::terms');
 $routes->get('privacy', 'Pages::privacy');
+$routes->get('download-cv', 'Pages::downloadCv'); // Public CV download (no login required)
 
 // ============================================
 // PROJECTS

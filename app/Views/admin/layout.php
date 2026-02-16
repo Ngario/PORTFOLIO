@@ -26,6 +26,15 @@ $isLoggedIn = (bool) session()->get('admin_logged_in');
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="<?= base_url('admin/projects') ?>">Projects</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?= base_url('admin/blog-posts') ?>">Blog Posts</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="adminDownloadsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Downloads
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="adminDownloadsDropdown">
+                            <li><a class="dropdown-item" href="<?= base_url('admin/downloads') ?>">Manage Downloads</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url('admin/download-categories') ?>">Categories</a></li>
+                        </ul>
+                    </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><span class="navbar-text text-white-50 me-3">Signed in as <?= esc($adminName) ?></span></li>

@@ -52,6 +52,9 @@ Welcome to my professional portfolio. Explore my projects, services, downloads, 
                     <a href="<?= base_url('projects') ?>" class="btn btn-light btn-lg me-2">
                         <i class="fas fa-folder-open me-2"></i>View Projects
                     </a>
+                    <a href="<?= base_url('download-cv') ?>" class="btn btn-warning btn-lg me-2">
+                        <i class="fas fa-file-arrow-down me-2"></i>Download CV
+                    </a>
                     <a href="<?= base_url('contact') ?>" class="btn btn-outline-light btn-lg">
                         <i class="fas fa-envelope me-2"></i>Contact Me
                     </a>

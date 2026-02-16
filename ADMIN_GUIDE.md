@@ -216,3 +216,15 @@ If you change DB columns (example: rename `projects.demo_url` → `projects.live
 
 Best practice: use **migrations** to change structure (so schema changes are in code). If you change in phpMyAdmin, do the matching code updates immediately.
 
+---
+
+## 8) Admin Downloads and Download CV
+
+**Admin Downloads (nested):** In the admin nav, **Downloads** is a dropdown containing:
+- **Manage Downloads** – list/add/edit/delete download items (category, title, description, file upload; files stored in `public/uploads/downloads/`).
+- **Categories** – list/add/edit/delete download categories (e.g. Software, Ebooks, Videos). These are the same categories used on the public site.
+
+**Public Downloads dropdown:** The main site header "Downloads" menu is built from the `download_categories` table. Add or edit categories in admin to change the dropdown. If the DB is unavailable, the header falls back to static links (Software, Books, Videos, Tutorials).
+
+**Download CV:** The homepage has a "Download CV" button linking to `/download-cv`. It is served by `Pages::downloadCv()` and is **free for everyone** (no login). Put your PDF at `public/uploads/cv/cv.pdf`.
+

@@ -9,6 +9,20 @@ helper('url');
 // Use path instead of full URL so it works on mobile and with http/https or different ports
 $uri = uri_string();
 $isHomePage = ($uri === '' || $uri === '/');
+
+// Try to load download categories from DB so the dropdown is dynamic.
+// If DB is unavailable, we fall back to the static list below.
+$downloadCategories = [];
+try {
+    $db = \Config\Database::connect();
+    $downloadCategories = $db->table('download_categories')
+        ->select('name, slug')
+        ->orderBy('name', 'ASC')
+        ->get()
+        ->getResultArray();
+} catch (\Throwable) {
+    $downloadCategories = [];
+}
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
     <!-- 
@@ -87,10 +101,16 @@ $isHomePage = ($uri === '' || $uri === '/');
                     <ul class="dropdown-menu" aria-labelledby="downloadsDropdown">
                         <li><a class="dropdown-item" href="<?= base_url('downloads') ?>">All Downloads</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="<?= base_url('downloads/software') ?>">Software</a></li>
-                        <li><a class="dropdown-item" href="<?= base_url('downloads/books') ?>">Books</a></li>
-                        <li><a class="dropdown-item" href="<?= base_url('downloads/videos') ?>">Videos</a></li>
-                        <li><a class="dropdown-item" href="<?= base_url('downloads/tutorials') ?>">Tutorials</a></li>
+                        <?php if (! empty($downloadCategories)): ?>
+                            <?php foreach ($downloadCategories as $cat): ?>
+                                <li><a class="dropdown-item" href="<?= base_url('downloads/' . esc($cat['slug'] ?? '')) ?>"><?= esc($cat['name'] ?? '') ?></a></li>
+                            <?php endforeach ?>
+                        <?php else: ?>
+                            <li><a class="dropdown-item" href="<?= base_url('downloads/software') ?>">Software</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url('downloads/books') ?>">Books</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url('downloads/videos') ?>">Videos</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url('downloads/tutorials') ?>">Tutorials</a></li>
+                        <?php endif ?>
                     </ul>
                 </li>
                 
