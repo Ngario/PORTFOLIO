@@ -79,7 +79,7 @@ $routes->get('blog/category/(:segment)', 'Blog::category/$1');  // Posts by cate
 $routes->get('downloads', 'Downloads::index');                    // All downloads
 $routes->get('downloads/(:segment)', 'Downloads::category/$1');   // By category (software, books, etc.)
 $routes->get('download/(:num)', 'Downloads::view/$1');            // Single download page
-$routes->get('download/file/(:num)', 'Downloads::file/$1');       // Actual file download (requires login)
+$routes->get('download/file/(:num)', 'Downloads::file/$1', ['filter' => 'auth']);  // Actual file – members only
 
 // ============================================
 // AUTHENTICATION

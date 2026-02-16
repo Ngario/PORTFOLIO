@@ -186,21 +186,21 @@ $isHomePage = ($uri === '' || $uri === '/');
                             
                             <!-- Profile Link -->
                             <li>
-                                <a class="dropdown-item" href="<?= base_url('profile') ?>">
+                                <a class="dropdown-item" href="<?= base_url('dashboard/profile') ?>">
                                     <i class="fas fa-user-edit me-2"></i> My Profile
                                 </a>
                             </li>
                             
                             <!-- My Downloads Link -->
                             <li>
-                                <a class="dropdown-item" href="<?= base_url('my-downloads') ?>">
+                                <a class="dropdown-item" href="<?= base_url('dashboard/my-downloads') ?>">
                                     <i class="fas fa-download me-2"></i> My Downloads
                                 </a>
                             </li>
                             
                             <!-- My Orders Link -->
                             <li>
-                                <a class="dropdown-item" href="<?= base_url('my-orders') ?>">
+                                <a class="dropdown-item" href="<?= base_url('dashboard/my-orders') ?>">
                                     <i class="fas fa-shopping-cart me-2"></i> My Orders
                                 </a>
                             </li>
@@ -209,7 +209,7 @@ $isHomePage = ($uri === '' || $uri === '/');
                             
                             <!-- Settings Link -->
                             <li>
-                                <a class="dropdown-item" href="<?= base_url('settings') ?>">
+                                <a class="dropdown-item" href="<?= base_url('dashboard/settings') ?>">
                                     <i class="fas fa-cog me-2"></i> Settings
                                 </a>
                             </li>

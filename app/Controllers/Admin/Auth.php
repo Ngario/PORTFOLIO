@@ -46,25 +46,28 @@ class Auth extends BaseController
 
         // 1) Email not found
         if ($user === null) {
-            return redirect()->back()->withInput()->with('error', 'Invalid login details.');
+            return redirect()->back()->withInput()->with('error', 'No user found with this email. Check the users table in the database.');
         }
 
         // 2) Only allow admin roles into /admin
         $role = (string) ($user['role'] ?? '');
         if (! in_array($role, ['admin', 'superadmin'], true)) {
-            return redirect()->back()->withInput()->with('error', 'You do not have admin access.');
+            return redirect()->back()->withInput()->with('error', 'You do not have admin access. This user\'s role is: "' . esc($role) . '". Set role to admin or superadmin in the database.');
         }
 
         // 3) Optional: block disabled users
         $status = $user['status'] ?? 'active';
         if (is_string($status) && strtolower($status) !== 'active') {
-            return redirect()->back()->withInput()->with('error', 'This account is not active.');
+            return redirect()->back()->withInput()->with('error', 'This account is not active. Set status to "active" in the users table.');
         }
 
         // 4) Verify password (plain password vs stored password_hash)
         $hash = (string) ($user['password_hash'] ?? '');
-        if ($hash === '' || ! password_verify($password, $hash)) {
-            return redirect()->back()->withInput()->with('error', 'Invalid login details.');
+        if ($hash === '') {
+            return redirect()->back()->withInput()->with('error', 'This user has no password set. Generate a hash with PHP and update password_hash in the database.');
+        }
+        if (! password_verify($password, $hash)) {
+            return redirect()->back()->withInput()->with('error', 'Password is incorrect. Regenerate a hash with: php -r "echo password_hash(\'YourPassword\', PASSWORD_DEFAULT);" and update the users.password_hash column.');
         }
 
         // 5) Mark admin session as logged in

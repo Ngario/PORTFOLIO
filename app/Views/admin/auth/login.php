@@ -7,7 +7,7 @@
             <div class="card-body">
                 <h1 class="h4 mb-3">Admin Login</h1>
 
-                <form method="post" action="<?= base_url('admin/login') ?>">
+                <form method="post" action="<?= current_url() ?>">
                     <div class="mb-3">
                         <label class="form-label">Email</label>
                         <input type="email" name="email" class="form-control" value="<?= esc(old('email')) ?>" required>
