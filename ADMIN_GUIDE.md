@@ -228,3 +228,16 @@ Best practice: use **migrations** to change structure (so schema changes are in 
 
 **Download CV:** The homepage has a "Download CV" button linking to `/download-cv`. It is served by `Pages::downloadCv()` and is **free for everyone** (no login). Put your PDF at `public/uploads/cv/cv.pdf`.
 
+---
+
+## 9) Deploying to Render (hosted site using the database)
+
+If the **hosted version on Render** still shows old static content (placeholder project cards and images from the code) instead of data from your database, the app is not using your production DB. You must set **environment variables** on Render.
+
+See **RENDER_DEPLOYMENT.md** for:
+
+- Required env vars: `CI_ENVIRONMENT`, `database.default.hostname`, `database.default.database`, `database.default.username`, `database.default.password`, `app.baseURL`
+- Why the site falls back to static content when the DB is not connected
+- Optional: run migrations on deploy
+- Project images and uploads (ephemeral filesystem on Render)
+
