@@ -28,15 +28,17 @@ This makes CodeIgniter run in production mode and use env-based config.
 
 ### B) Database (must match your real DB host)
 
-Use the **exact names** below; they are read in `app/Config/Database.php`.
+Use the names below; they are read in `app/Config/Database.php`. You can use either **dotted** keys or **UPPERCASE_WITH_UNDERSCORES** (e.g. if Render normalizes env names):
 
-| Key | Example | Description |
-|-----|---------|-------------|
-| `database.default.hostname` | `dpg-xxxxx-a.oregon-postgres.render.com` | DB host (from Render DB or your provider). |
-| `database.default.database` | `portfolio_db` | Database name. |
-| `database.default.username` | `portfolio_user` | DB user. |
-| `database.default.password` | `your-secret-password` | DB password. |
-| `database.default.port` | `5432` | Port (e.g. 5432 for PostgreSQL, 3306 for MySQL). |
+| Key (dotted) | Alternative key | Example value |
+|--------------|------------------|---------------|
+| `database.default.hostname` | `DATABASE_DEFAULT_HOSTNAME` | Your Aiven host, e.g. `portfolio1-db-portfoliomine.d.aivencloud.com` |
+| `database.default.database` | `DATABASE_DEFAULT_DATABASE` | `portfolio_db` |
+| `database.default.username` | `DATABASE_DEFAULT_USERNAME` | `avnadmin` |
+| `database.default.password` | `DATABASE_DEFAULT_PASSWORD` | Your Aiven password |
+| `database.default.port` | `DATABASE_DEFAULT_PORT` | `10956` |
+
+**If you see "No such file or directory" for MySQLi:** the app is using the default host (`localhost`), i.e. the **hostname** env var is not set or not loaded. Fix: set `database.default.hostname` (or `DATABASE_DEFAULT_HOSTNAME`) to your real DB host and redeploy.
 
 **Note:** Your app is currently configured for **MySQL** (`MySQLi`). If your Render database is **PostgreSQL**, you must change the DB driver and possibly the port in `app/Config/Database.php` (and use a PostgreSQL-compatible schema). The env vars above stay the same names.
 

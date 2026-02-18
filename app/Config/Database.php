@@ -199,30 +199,31 @@ class Database extends Config
             return;
         }
 
-        // Production (e.g. Render): use env vars so credentials are not in repo
-        $hostname = env('database.default.hostname');
+        // Production (e.g. Render): use env vars so credentials are not in repo.
+        // Support both dotted keys (database.default.hostname) and uppercase-with-underscores (DATABASE_DEFAULT_HOSTNAME) for hosts that normalize env names.
+        $hostname = env('database.default.hostname') ?: env('DATABASE_DEFAULT_HOSTNAME');
         if ($hostname !== false && $hostname !== null && $hostname !== '') {
             $this->default['hostname'] = $hostname;
         }
-        $username = env('database.default.username');
+        $username = env('database.default.username') ?: env('DATABASE_DEFAULT_USERNAME');
         if ($username !== false && $username !== null) {
             $this->default['username'] = $username;
         }
-        $password = env('database.default.password');
+        $password = env('database.default.password') ?: env('DATABASE_DEFAULT_PASSWORD');
         if ($password !== false && $password !== null) {
             $this->default['password'] = (string) $password;
         }
-        $database = env('database.default.database');
+        $database = env('database.default.database') ?: env('DATABASE_DEFAULT_DATABASE');
         if ($database !== false && $database !== null && $database !== '') {
             $this->default['database'] = $database;
         }
-        $port = env('database.default.port');
+        $port = env('database.default.port') ?: env('DATABASE_DEFAULT_PORT');
         if ($port !== false && $port !== null && $port !== '') {
             $this->default['port'] = (int) $port;
         }
 
         // Aiven (and similar) require SSL. If CA cert content is provided via env, write to file and enable encrypt.
-        $sslCaContent = env('database.default.encrypt.ssl_ca_content');
+        $sslCaContent = env('database.default.encrypt.ssl_ca_content') ?: env('DATABASE_DEFAULT_ENCRYPT_SSL_CA_CONTENT');
         if ($hostname !== false && $hostname !== null && $hostname !== ''
             && $sslCaContent !== false && $sslCaContent !== null && trim((string) $sslCaContent) !== '') {
             $cacheDir = defined('WRITEPATH') ? WRITEPATH . 'cache' : (FCPATH . '..' . DIRECTORY_SEPARATOR . 'writable' . DIRECTORY_SEPARATOR . 'cache');
