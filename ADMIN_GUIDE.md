@@ -240,4 +240,3 @@ See **RENDER_DEPLOYMENT.md** for:
 - Why the site falls back to static content when the DB is not connected
 - Optional: run migrations on deploy
 - Project images and uploads (ephemeral filesystem on Render)
-

@@ -62,9 +62,16 @@ class Downloads extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
+        $category = null;
+        if (! empty($item['category_id'])) {
+            $catRow = \Config\Database::connect()->table('download_categories')->where('id', (int) $item['category_id'])->get()->getRowArray();
+            $category = $catRow;
+        }
+
         $data = [
             'title'    => $item['title'] ?? 'Download',
             'download' => $item,
+            'category' => $category,
         ];
         return view('downloads/view', $data);
     }

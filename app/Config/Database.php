@@ -220,6 +220,25 @@ class Database extends Config
         if ($port !== false && $port !== null && $port !== '') {
             $this->default['port'] = (int) $port;
         }
+
+        // Aiven (and similar) require SSL. If CA cert content is provided via env, write to file and enable encrypt.
+        $sslCaContent = env('database.default.encrypt.ssl_ca_content');
+        if ($hostname !== false && $hostname !== null && $hostname !== ''
+            && $sslCaContent !== false && $sslCaContent !== null && trim((string) $sslCaContent) !== '') {
+            $cacheDir = defined('WRITEPATH') ? WRITEPATH . 'cache' : (FCPATH . '..' . DIRECTORY_SEPARATOR . 'writable' . DIRECTORY_SEPARATOR . 'cache');
+            if (! is_dir($cacheDir)) {
+                @mkdir($cacheDir, 0755, true);
+            }
+            $caFile = $cacheDir . DIRECTORY_SEPARATOR . 'aiven-ca.pem';
+            @file_put_contents($caFile, $sslCaContent);
+            if (is_file($caFile)) {
+                $this->default['encrypt'] = [
+                    'ssl_ca'     => $caFile,
+                    'ssl_verify' => false,
+                ];
+            }
+        }
+
         // Turn off DB debug in production to avoid exposing queries
         if (ENVIRONMENT === 'production') {
             $this->default['DBDebug'] = false;

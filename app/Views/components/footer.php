@@ -84,7 +84,7 @@
                 </ul>
             </div>
             
-            <!-- COLUMN 3: Resources -->
+            <!-- COLUMN 3: Resources (download categories from DB, fallback to defaults) -->
             <div class="col-lg-3 col-md-6 mb-4">
                 <h5 class="text-uppercase mb-3">Resources</h5>
                 <ul class="list-unstyled">
@@ -93,26 +93,27 @@
                             <i class="fas fa-chevron-right me-2"></i>Downloads
                         </a>
                     </li>
-                    <li class="mb-2">
-                        <a href="<?= base_url('downloads/software') ?>" class="text-white-50 text-decoration-none">
-                            <i class="fas fa-chevron-right me-2"></i>Software
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="<?= base_url('downloads/books') ?>" class="text-white-50 text-decoration-none">
-                            <i class="fas fa-chevron-right me-2"></i>Books
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="<?= base_url('downloads/tutorials') ?>" class="text-white-50 text-decoration-none">
-                            <i class="fas fa-chevron-right me-2"></i>Tutorials
-                        </a>
-                    </li>
-                    <li class="mb-2">
-                        <a href="<?= base_url('downloads/videos') ?>" class="text-white-50 text-decoration-none">
-                            <i class="fas fa-chevron-right me-2"></i>Videos
-                        </a>
-                    </li>
+                    <?php
+                    $footerDownloadCats = [];
+                    try {
+                        $footerDownloadCats = \Config\Database::connect()->table('download_categories')->orderBy('name', 'ASC')->get()->getResultArray();
+                    } catch (\Throwable $e) {
+                        $footerDownloadCats = [];
+                    }
+                    if (! empty($footerDownloadCats)): ?>
+                        <?php foreach ($footerDownloadCats as $fc): ?>
+                            <li class="mb-2">
+                                <a href="<?= base_url('downloads/' . esc($fc['slug'] ?? '')) ?>" class="text-white-50 text-decoration-none">
+                                    <i class="fas fa-chevron-right me-2"></i><?= esc($fc['name'] ?? '') ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <li class="mb-2"><a href="<?= base_url('downloads/software') ?>" class="text-white-50 text-decoration-none"><i class="fas fa-chevron-right me-2"></i>Software</a></li>
+                        <li class="mb-2"><a href="<?= base_url('downloads/books') ?>" class="text-white-50 text-decoration-none"><i class="fas fa-chevron-right me-2"></i>Books</a></li>
+                        <li class="mb-2"><a href="<?= base_url('downloads/tutorials') ?>" class="text-white-50 text-decoration-none"><i class="fas fa-chevron-right me-2"></i>Tutorials</a></li>
+                        <li class="mb-2"><a href="<?= base_url('downloads/videos') ?>" class="text-white-50 text-decoration-none"><i class="fas fa-chevron-right me-2"></i>Videos</a></li>
+                    <?php endif; ?>
                 </ul>
             </div>
             

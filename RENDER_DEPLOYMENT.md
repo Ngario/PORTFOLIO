@@ -85,6 +85,30 @@ Render has a built-in **PostgreSQL** service (easy to add in the same dashboard)
 
 **Recommendation:** If you want the least change, use **Option A** with a hosted MySQL (e.g. Railway or Aiven), export from phpMyAdmin, import there, then set the env vars on Render.
 
+### If you chose Aiven (MySQL)
+
+Aiven **requires SSL**. Set these on Render and add the CA certificate as below.
+
+| Key | Value (from your Aiven Overview) |
+|-----|----------------------------------|
+| `database.default.hostname` | `portfolio1-db-portfoliomine.d.aivencloud.com` |
+| `database.default.port` | `10956` |
+| `database.default.database` | `defaultdb` *(or create a DB named `portfolio_db` in Aiven and use that)* |
+| `database.default.username` | `avnadmin` |
+| `database.default.password` | *(Click “Show” / reveal in Aiven and copy the real password; do not use a placeholder.)* |
+
+**SSL (required for Aiven):**
+
+1. In Aiven Console → your service **Overview** → **CA certificate** → **Show** / download.
+2. Copy the **entire PEM content** (including `-----BEGIN CERTIFICATE-----` and `-----END CERTIFICATE-----`).
+3. On Render → **Environment** → **Add**:
+   - **Key:** `database.default.encrypt.ssl_ca_content`
+   - **Value:** paste the full CA certificate (multiline is fine).
+
+The app will write this to a temp file and use it for the MySQL SSL connection. Without it, the connection to Aiven will fail.
+
+**Note:** If you want to use database name `portfolio_db` (as locally), create that database in Aiven (e.g. via **Query** or **Databases** in the service) and set `database.default.database` = `portfolio_db`. Otherwise keep `defaultdb` and run your migrations/import there.
+
 ---
 
 ## 4) After setting env vars
@@ -131,6 +155,7 @@ If you already ran migrations on the same DB from your local machine, you may no
 
 - [ ] `CI_ENVIRONMENT` = `production`
 - [ ] `database.default.hostname`, `database.default.database`, `database.default.username`, `database.default.password` (and optionally `database.default.port`) set to your **real** hosted DB.
+- [ ] **Aiven only:** `database.default.encrypt.ssl_ca_content` = full CA certificate PEM (from Aiven Overview).
 - [ ] `app.baseURL` = your Render app URL (e.g. `https://YOUR-SERVICE-NAME.onrender.com/`).
 - [ ] Redeploy after changing env vars.
 - [ ] (Optional) Run `php spark migrate --all` in build or via Shell so the DB has the right tables/columns.
