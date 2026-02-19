@@ -200,17 +200,17 @@ class Database extends Config
         }
 
         // Production (e.g. Render): use env vars so credentials are not in repo.
-        // Try multiple key names because some hosts normalize or prefix env vars (dots → underscores, etc.).
-        $hostname = $this->getEnvValue(['database.default.hostname', 'DATABASE_DEFAULT_HOSTNAME', 'DB_HOST', 'MYSQL_HOST']);
-        $username = $this->getEnvValue(['database.default.username', 'DATABASE_DEFAULT_USERNAME', 'DB_USERNAME', 'DB_USER', 'MYSQL_USER']);
-        $password = $this->getEnvValue(['database.default.password', 'DATABASE_DEFAULT_PASSWORD', 'DB_PASSWORD', 'MYSQL_PASSWORD']);
-        $database = $this->getEnvValue(['database.default.database', 'DATABASE_DEFAULT_DATABASE', 'DB_DATABASE', 'DB_NAME', 'MYSQL_DATABASE']);
-        $port     = $this->getEnvValue(['database.default.port', 'DATABASE_DEFAULT_PORT', 'DB_PORT', 'MYSQL_PORT']);
+        // Try multiple key names (see DatabaseEnv) so we never override BaseConfig methods.
+        $hostname = DatabaseEnv::resolveKeys(['database.default.hostname', 'DATABASE_DEFAULT_HOSTNAME', 'DB_HOST', 'MYSQL_HOST']);
+        $username = DatabaseEnv::resolveKeys(['database.default.username', 'DATABASE_DEFAULT_USERNAME', 'DB_USERNAME', 'DB_USER', 'MYSQL_USER']);
+        $password = DatabaseEnv::resolveKeys(['database.default.password', 'DATABASE_DEFAULT_PASSWORD', 'DB_PASSWORD', 'MYSQL_PASSWORD']);
+        $database = DatabaseEnv::resolveKeys(['database.default.database', 'DATABASE_DEFAULT_DATABASE', 'DB_DATABASE', 'DB_NAME', 'MYSQL_DATABASE']);
+        $port     = DatabaseEnv::resolveKeys(['database.default.port', 'DATABASE_DEFAULT_PORT', 'DB_PORT', 'MYSQL_PORT']);
 
         // Optional: parse full MySQL URI (e.g. Aiven "Service URI") if hostname not set
-        $uri = $this->getEnvValue(['MYSQL_URI', 'DATABASE_URL']);
+        $uri = DatabaseEnv::resolveKeys(['MYSQL_URI', 'DATABASE_URL']);
         if (($hostname === null || $hostname === '' || $hostname === 'localhost') && $uri !== null && $uri !== '') {
-            $parsed = $this->parseDatabaseUri($uri);
+            $parsed = DatabaseEnv::parseUri($uri);
             if ($parsed !== null) {
                 $hostname = $parsed['host'];
                 $port     = $port ?? $parsed['port'];
@@ -252,7 +252,7 @@ class Database extends Config
         }
 
         // Aiven (and similar) require SSL. If CA cert content is provided via env, write to file and enable encrypt.
-        $sslCaContent = $this->getEnvValue(['database.default.encrypt.ssl_ca_content', 'DATABASE_DEFAULT_ENCRYPT_SSL_CA_CONTENT', 'DB_SSL_CA_CONTENT']);
+        $sslCaContent = DatabaseEnv::resolveKeys(['database.default.encrypt.ssl_ca_content', 'DATABASE_DEFAULT_ENCRYPT_SSL_CA_CONTENT', 'DB_SSL_CA_CONTENT']);
         if ($this->default['hostname'] !== '' && $sslCaContent !== null && trim((string) $sslCaContent) !== '') {
             $cacheDir = defined('WRITEPATH') ? WRITEPATH . 'cache' : (FCPATH . '..' . DIRECTORY_SEPARATOR . 'writable' . DIRECTORY_SEPARATOR . 'cache');
             if (! is_dir($cacheDir)) {
@@ -272,55 +272,5 @@ class Database extends Config
         if (ENVIRONMENT === 'production') {
             $this->default['DBDebug'] = false;
         }
-    }
-
-    /**
-     * Get first non-empty value from env ($_ENV, $_SERVER, getenv).
-     *
-     * @param list<string> $keys
-     * @return string|int|float|bool|null
-     */
-    protected function getEnvValue(array $keys)
-    {
-        foreach ($keys as $key) {
-            $v = $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
-            if ($v !== false && $v !== null && $v !== '') {
-                if (is_string($v) && in_array(strtolower($v), ['true', 'false', 'empty', 'null'], true)) {
-                    return match (strtolower($v)) {
-                        'true' => true,
-                        'false' => false,
-                        'empty' => '',
-                        'null' => null,
-                        default => $v,
-                    };
-                }
-                return $v;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Parse MySQL URI (mysql://user:pass@host:port/dbname) into components.
-     *
-     * @return array{host: string, port: int, user: string, pass: string, db: string}|null
-     */
-    protected function parseDatabaseUri(string $uri): ?array
-    {
-        $uri = trim($uri);
-        if (strpos($uri, 'mysql://') !== 0 && strpos($uri, 'mysql:') !== 0) {
-            return null;
-        }
-        $parsed = parse_url(preg_replace('#^mysql:#', 'mysql://', $uri));
-        if ($parsed === false || empty($parsed['host'])) {
-            return null;
-        }
-        return [
-            'host' => $parsed['host'],
-            'port' => (int) ($parsed['port'] ?? 3306),
-            'user' => urldecode($parsed['user'] ?? ''),
-            'pass' => urldecode($parsed['pass'] ?? ''),
-            'db'   => trim(urldecode($parsed['path'] ?? ''), '/') ?: 'defaultdb',
-        ];
     }
 }
