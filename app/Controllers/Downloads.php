@@ -22,8 +22,9 @@ class Downloads extends BaseController
         $db    = \Config\Database::connect();
         $model = model(DownloadModel::class);
 
-        $categories = $db->table('download_categories')->orderBy('name', 'ASC')->get()->getResultArray();
-        $downloads  = $model->getActive();
+        $categoriesQuery = $db->table('download_categories')->orderBy('name', 'ASC')->get();
+        $categories      = ($categoriesQuery !== false) ? $categoriesQuery->getResultArray() : [];
+        $downloads       = $model->getActive();
 
         $data = [
             'title'      => 'Downloads',
@@ -39,7 +40,8 @@ class Downloads extends BaseController
         $db    = \Config\Database::connect();
         $model = model(DownloadModel::class);
 
-        $cat = $db->table('download_categories')->where('slug', $slug)->get()->getRowArray();
+        $catQuery = $db->table('download_categories')->where('slug', $slug)->get();
+        $cat      = ($catQuery !== false) ? $catQuery->getRowArray() : null;
         if (! $cat) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -64,8 +66,8 @@ class Downloads extends BaseController
 
         $category = null;
         if (! empty($item['category_id'])) {
-            $catRow = \Config\Database::connect()->table('download_categories')->where('id', (int) $item['category_id'])->get()->getRowArray();
-            $category = $catRow;
+            $catQuery = \Config\Database::connect()->table('download_categories')->where('id', (int) $item['category_id'])->get();
+            $category  = ($catQuery !== false) ? $catQuery->getRowArray() : null;
         }
 
         $data = [

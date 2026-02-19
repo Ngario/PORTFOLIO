@@ -96,7 +96,8 @@
                     <?php
                     $footerDownloadCats = [];
                     try {
-                        $footerDownloadCats = \Config\Database::connect()->table('download_categories')->orderBy('name', 'ASC')->get()->getResultArray();
+                        $q = \Config\Database::connect()->table('download_categories')->orderBy('name', 'ASC')->get();
+                        $footerDownloadCats = ($q !== false) ? $q->getResultArray() : [];
                     } catch (\Throwable $e) {
                         $footerDownloadCats = [];
                     }
