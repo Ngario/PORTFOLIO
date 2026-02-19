@@ -30,15 +30,19 @@ This makes CodeIgniter run in production mode and use env-based config.
 
 Use the names below; they are read in `app/Config/Database.php`. You can use either **dotted** keys or **UPPERCASE_WITH_UNDERSCORES** (e.g. if Render normalizes env names):
 
-| Key (dotted) | Alternative key | Example value |
-|--------------|------------------|---------------|
-| `database.default.hostname` | `DATABASE_DEFAULT_HOSTNAME` | Your Aiven host, e.g. `portfolio1-db-portfoliomine.d.aivencloud.com` |
-| `database.default.database` | `DATABASE_DEFAULT_DATABASE` | `portfolio_db` |
-| `database.default.username` | `DATABASE_DEFAULT_USERNAME` | `avnadmin` |
-| `database.default.password` | `DATABASE_DEFAULT_PASSWORD` | Your Aiven password |
-| `database.default.port` | `DATABASE_DEFAULT_PORT` | `10956` |
+The app tries **several env key names** (so use whichever Render accepts). At least **hostname** must be set.
 
-**If you see "No such file or directory" for MySQLi:** the app is using the default host (`localhost`), i.e. the **hostname** env var is not set or not loaded. Fix: set `database.default.hostname` (or `DATABASE_DEFAULT_HOSTNAME`) to your real DB host and redeploy.
+| Purpose | Keys tried (first match wins) |
+|--------|--------------------------------|
+| Host | `database.default.hostname`, `DATABASE_DEFAULT_HOSTNAME`, `DB_HOST`, `MYSQL_HOST` |
+| Port | `database.default.port`, `DATABASE_DEFAULT_PORT`, `DB_PORT`, `MYSQL_PORT` |
+| Database | `database.default.database`, `DATABASE_DEFAULT_DATABASE`, `DB_DATABASE`, `DB_NAME`, `MYSQL_DATABASE` |
+| Username | `database.default.username`, `DATABASE_DEFAULT_USERNAME`, `DB_USERNAME`, `DB_USER`, `MYSQL_USER` |
+| Password | `database.default.password`, `DATABASE_DEFAULT_PASSWORD`, `DB_PASSWORD`, `MYSQL_PASSWORD` |
+
+**Alternative:** you can set a single **`MYSQL_URI`** (or `DATABASE_URL`) with the full Aiven connection string (e.g. `mysql://avnadmin:password@portfolio1-db-....aivencloud.com:10956/portfolio_db`). The app will parse it if hostname is not set.
+
+**If you see "No such file or directory" for MySQLi:** the app is still using `localhost` (socket), so the **host** is not being read. On Render, try setting **`DB_HOST`** = `portfolio1-db-portfoliomine.d.aivencloud.com` (no dots in the key). Then redeploy.
 
 **Note:** Your app is currently configured for **MySQL** (`MySQLi`). If your Render database is **PostgreSQL**, you must change the DB driver and possibly the port in `app/Config/Database.php` (and use a PostgreSQL-compatible schema). The env vars above stay the same names.
 
