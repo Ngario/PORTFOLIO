@@ -280,7 +280,7 @@ class Database extends Config
      * @param list<string> $keys
      * @return string|int|float|bool|null
      */
-    private function getEnvValue(array $keys)
+    protected function getEnvValue(array $keys)
     {
         foreach ($keys as $key) {
             $v = $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
@@ -305,7 +305,7 @@ class Database extends Config
      *
      * @return array{host: string, port: int, user: string, pass: string, db: string}|null
      */
-    private function parseDatabaseUri(string $uri): ?array
+    protected function parseDatabaseUri(string $uri): ?array
     {
         $uri = trim($uri);
         if (strpos($uri, 'mysql://') !== 0 && strpos($uri, 'mysql:') !== 0) {
