@@ -115,6 +115,29 @@ The app will write this to a temp file and use it for the MySQL SSL connection. 
 
 **Note:** If you want to use database name `portfolio_db` (as locally), create that database in Aiven (e.g. via **Query** or **Databases** in the service) and set `database.default.database` = `portfolio_db`. Otherwise keep `defaultdb` and run your migrations/import there.
 
+### How to view your DB tables in Aiven
+
+You can confirm that your Aiven database has the right tables (e.g. `users`, `projects`, `download_categories`) in either of these ways:
+
+**Option A – Aiven web console (Query / Console)**
+
+1. Log in at [console.aiven.io](https://console.aiven.io).
+2. Open your **project** → select your **MySQL service** (e.g. `portfolio1-db`).
+3. Go to **Query** (or **Console** / **SQL**) in the left sidebar.
+4. Run:
+   - `SHOW TABLES;` — lists all tables in the current database.
+   - `SELECT * FROM users LIMIT 5;` — inspect `users` (replace with `projects`, `download_categories`, etc. as needed).
+
+**Option B – MySQL Workbench (or any MySQL client)**
+
+1. In Aiven: **Service** → **Overview** → note **Host**, **Port**, **User**, **Password**; copy the **CA certificate** (for SSL).
+2. In MySQL Workbench: **Database** → **Connect to Database**; enter Host, Port, User, Password; in **SSL** tab attach the CA file (or paste CA content if supported).
+3. Connect, then run the same SQL:
+   - `SHOW TABLES;`
+   - `SELECT * FROM users LIMIT 5;` (or other table names).
+
+If `SHOW TABLES;` is empty or missing tables like `users` or `download_categories`, run your app’s migrations against this database (e.g. from your machine with env pointing to Aiven, or from Render’s Shell: `php spark migrate --all`) so the schema and seed data exist. Then Register, Login, Downloads, and Featured projects will work.
+
 ---
 
 ## 4) After setting env vars
@@ -144,6 +167,7 @@ If you already ran migrations on the same DB from your local machine, you may no
 
 - **Featured projects:** The homepage shows projects from the `projects` table when the DB is available. If migrations were never run on production, that table may be missing or empty and you’ll see the fallback placeholder cards.
 - **Downloads & footer links:** The routes `/downloads`, `/downloads/software`, `/downloads/books`, `/downloads/tutorials`, `/downloads/videos` need the `download_categories` table. A seed migration adds the default categories (software, books, tutorials, videos). Run `php spark migrate --all` so that migration runs; then those links work instead of 404.
+- **Register & Login:** The `users` table must exist (created by your migrations). If it is missing, registration and login will show a friendly error instead of crashing; run migrations so the table exists.
 
 ---
 

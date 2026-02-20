@@ -90,21 +90,34 @@ class Auth extends BaseController
             return redirect()->back()->withInput()->with('error', 'An account with this email already exists.');
         }
 
-        $userId = $userModel->insert([
-            'name'          => $name,
-            'email'         => $email,
-            'password_hash' => password_hash($password, PASSWORD_DEFAULT),
-            'role'          => 'user',
-            'status'        => 'active',
-            'email_verified_at' => null,
-        ]);
+        try {
+            $userId = $userModel->insert([
+                'name'          => $name,
+                'email'         => $email,
+                'password_hash' => password_hash($password, PASSWORD_DEFAULT),
+                'role'          => 'user',
+                'status'        => 'active',
+                'email_verified_at' => null,
+            ]);
+        } catch (\Throwable $e) {
+            return redirect()->back()->withInput()->with('error', 'Registration is temporarily unavailable. Please try again later.');
+        }
 
         if (! $userId) {
             return redirect()->back()->withInput()->with('error', 'Registration failed. Please try again.');
         }
 
         $user = $userModel->find($userId);
-        $this->setMemberSession($user);
+        if ($user === null) {
+            // DB read failed after insert; set session from form data so user is still logged in
+            $this->setMemberSession([
+                'id'    => $userId,
+                'name'  => $name,
+                'email' => $email,
+            ]);
+        } else {
+            $this->setMemberSession($user);
+        }
         return redirect()->to(base_url('dashboard'))->with('success', 'Welcome! You are now logged in.');
     }
 
