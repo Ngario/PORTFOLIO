@@ -49,13 +49,14 @@ class UserModel extends Model
 
     /**
      * Find one user by ID. Returns null on DB error so auth flows don't crash.
+     * Signature must match CodeIgniter\BaseModel::find($id = null).
      *
      * @return array<string, mixed>|null
      */
-    public function find($id, $columns = '*'): ?array
+    public function find($id = null)
     {
         try {
-            $row = parent::find($id, $columns);
+            $row = parent::find($id);
             return is_array($row) ? $row : null;
         } catch (\Throwable $e) {
             return null;
