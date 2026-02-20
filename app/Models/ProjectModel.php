@@ -79,13 +79,18 @@ class ProjectModel extends Model
 
     /**
      * Get projects for the homepage: featured first, then latest. Limit optional.
+     * Returns [] on query failure (e.g. table missing) so the site still loads.
      *
      * @return array<int, array<string, mixed>>
      */
     public function getFeaturedForHome(int $limit = 6): array
     {
-        $rows = $this->orderBy('featured', 'DESC')->orderBy('id', 'DESC')->limit($limit)->findAll();
-        return array_map([$this, 'decodeTechStack'], $rows);
+        try {
+            $rows = $this->orderBy('featured', 'DESC')->orderBy('id', 'DESC')->limit($limit)->findAll();
+            return array_map([$this, 'decodeTechStack'], $rows);
+        } catch (\Throwable $e) {
+            return [];
+        }
     }
 
     /**

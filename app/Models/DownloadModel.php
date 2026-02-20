@@ -22,14 +22,23 @@ class DownloadModel extends Model
         'is_paid', 'price', 'is_active',
     ];
 
-    /** Only active downloads */
+    /** Only active downloads; returns [] on query failure (e.g. table missing). */
     public function getActive(string $orderBy = 'id', string $direction = 'DESC'): array
     {
-        return $this->where('is_active', 1)->orderBy($orderBy, $direction)->findAll();
+        try {
+            return $this->where('is_active', 1)->orderBy($orderBy, $direction)->findAll();
+        } catch (\Throwable $e) {
+            return [];
+        }
     }
 
+    /** Returns [] on query failure. */
     public function getByCategory(int $categoryId): array
     {
-        return $this->where('category_id', $categoryId)->where('is_active', 1)->findAll();
+        try {
+            return $this->where('category_id', $categoryId)->where('is_active', 1)->findAll();
+        } catch (\Throwable $e) {
+            return [];
+        }
     }
 }

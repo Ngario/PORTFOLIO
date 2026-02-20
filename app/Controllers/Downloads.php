@@ -19,34 +19,45 @@ class Downloads extends BaseController
 {
     public function index()
     {
-        $db    = \Config\Database::connect();
-        $model = model(DownloadModel::class);
-
-        $categoriesQuery = $db->table('download_categories')->orderBy('name', 'ASC')->get();
-        $categories      = ($categoriesQuery !== false) ? $categoriesQuery->getResultArray() : [];
-        $downloads       = $model->getActive();
+        $categories = [];
+        $downloads  = [];
+        try {
+            $db    = \Config\Database::connect();
+            $model = model(DownloadModel::class);
+            $categoriesQuery = $db->table('download_categories')->orderBy('name', 'ASC')->get();
+            $categories      = ($categoriesQuery !== false) ? $categoriesQuery->getResultArray() : [];
+            $downloads       = $model->getActive();
+        } catch (\Throwable $e) {
+            $categories = [];
+            $downloads  = [];
+        }
 
         $data = [
-            'title'      => 'Downloads',
+            'title'       => 'Downloads',
             'description' => 'Books, software, and resources',
-            'categories' => $categories,
-            'downloads'  => $downloads,
+            'categories'  => $categories,
+            'downloads'   => $downloads,
         ];
         return view('downloads/index', $data);
     }
 
     public function category(string $slug)
     {
-        $db    = \Config\Database::connect();
-        $model = model(DownloadModel::class);
-
-        $catQuery = $db->table('download_categories')->where('slug', $slug)->get();
-        $cat      = ($catQuery !== false) ? $catQuery->getRowArray() : null;
-        if (! $cat) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        try {
+            $db         = \Config\Database::connect();
+            $model      = model(DownloadModel::class);
+            $catQuery   = $db->table('download_categories')->where('slug', $slug)->get();
+            $cat        = ($catQuery !== false) ? $catQuery->getRowArray() : null;
+            if (! $cat) {
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            }
+            $downloads  = $model->getByCategory((int) $cat['id']);
+        } catch (\CodeIgniter\Exceptions\PageNotFoundException $e) {
+            throw $e;
+        } catch (\Throwable $e) {
+            return redirect()->to(base_url('downloads'))->with('error', 'Categories temporarily unavailable. Please try again.');
         }
 
-        $downloads = $model->getByCategory((int) $cat['id']);
         $data = [
             'title'       => 'Downloads - ' . ($cat['name'] ?? $slug),
             'description' => 'Downloads in this category',
@@ -58,16 +69,24 @@ class Downloads extends BaseController
 
     public function view(int $id)
     {
-        $model = model(DownloadModel::class);
-        $item  = $model->find($id);
+        try {
+            $model = model(DownloadModel::class);
+            $item  = $model->find($id);
+        } catch (\Throwable $e) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
         if (! $item || empty($item['is_active'])) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
         $category = null;
-        if (! empty($item['category_id'])) {
-            $catQuery = \Config\Database::connect()->table('download_categories')->where('id', (int) $item['category_id'])->get();
-            $category  = ($catQuery !== false) ? $catQuery->getRowArray() : null;
+        try {
+            if (! empty($item['category_id'])) {
+                $catQuery = \Config\Database::connect()->table('download_categories')->where('id', (int) $item['category_id'])->get();
+                $category = ($catQuery !== false) ? $catQuery->getRowArray() : null;
+            }
+        } catch (\Throwable $e) {
+            $category = null;
         }
 
         $data = [
@@ -84,8 +103,12 @@ class Downloads extends BaseController
      */
     public function file(int $id)
     {
-        $model = model(DownloadModel::class);
-        $item  = $model->find($id);
+        try {
+            $model = model(DownloadModel::class);
+            $item  = $model->find($id);
+        } catch (\Throwable $e) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
         if (! $item || empty($item['is_active']) || empty($item['file_path'])) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
@@ -96,13 +119,16 @@ class Downloads extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        // Optional: log download in download_logs table
-        $db = \Config\Database::connect();
-        $db->table('download_logs')->insert([
-            'user_id'      => session()->get('user_id'),
-            'download_id'  => $id,
-            'downloaded_at' => date('Y-m-d H:i:s'),
-        ]);
+        try {
+            $db = \Config\Database::connect();
+            $db->table('download_logs')->insert([
+                'user_id'       => session()->get('user_id'),
+                'download_id'   => $id,
+                'downloaded_at' => date('Y-m-d H:i:s'),
+            ]);
+        } catch (\Throwable $e) {
+            // Log optional; continue to serve file
+        }
 
         return $this->response->download($path, null, true);
     }

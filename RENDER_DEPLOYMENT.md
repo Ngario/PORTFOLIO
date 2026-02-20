@@ -140,6 +140,11 @@ To ensure the **production** database has the same structure (e.g. `projects.ima
 
 If you already ran migrations on the same DB from your local machine, you may not need to run them again; only if the hosted DB was never migrated or is a different database.
 
+**Why this matters for your site:**
+
+- **Featured projects:** The homepage shows projects from the `projects` table when the DB is available. If migrations were never run on production, that table may be missing or empty and you’ll see the fallback placeholder cards.
+- **Downloads & footer links:** The routes `/downloads`, `/downloads/software`, `/downloads/books`, `/downloads/tutorials`, `/downloads/videos` need the `download_categories` table. A seed migration adds the default categories (software, books, tutorials, videos). Run `php spark migrate --all` so that migration runs; then those links work instead of 404.
+
 ---
 
 ## 6) Project images and uploads on Render
