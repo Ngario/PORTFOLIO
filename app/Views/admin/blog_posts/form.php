@@ -14,7 +14,7 @@ $action = $mode === 'edit'
 
 <div class="card">
     <div class="card-body">
-        <form method="post" action="<?= $action ?>">
+        <form method="post" action="<?= $action ?>" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label">Title</label>
                 <input name="title" class="form-control" value="<?= esc(old('title', $post['title'] ?? '')) ?>" required>
@@ -39,6 +39,15 @@ $action = $mode === 'edit'
                     <label class="form-label">Published at</label>
                     <input name="published_at" class="form-control" value="<?= esc(old('published_at', $post['published_at'] ?? '')) ?>" placeholder="YYYY-MM-DD HH:MM:SS">
                 </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Featured / placeholder image</label>
+                <input type="file" name="image" class="form-control" accept="image/jpeg,image/png,image/gif,image/webp">
+                <div class="form-text">Optional. JPG, PNG, GIF, WebP. Shown on blog listing and post header.</div>
+                <?php if (! empty($post['image'])): ?>
+                    <p class="small text-muted mt-1 mb-0">Current: <img src="<?= base_url('uploads/' . esc($post['image'])) ?>" alt="" style="max-height:60px;"> <code><?= esc($post['image']) ?></code></p>
+                <?php endif ?>
             </div>
 
             <div class="mb-3 mt-3">

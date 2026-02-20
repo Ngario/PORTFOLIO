@@ -51,6 +51,7 @@ class Downloads extends BaseController
                 'category_id' => '',
                 'title'       => '',
                 'description' => '',
+                'image'       => '',
                 'is_paid'     => 0,
                 'price'       => '',
                 'is_active'   => 1,
@@ -73,10 +74,15 @@ class Downloads extends BaseController
         // Handle file upload (required for create)
         $upload = $this->handleUpload();
         if ($upload === null) {
-            return redirect()->back()->withInput()->with('error', 'Please upload a file.');
+            $msg = $this->getUploadErrorMessage();
+            return redirect()->back()->withInput()->with('error', $msg);
         }
         $data['file_path'] = $upload['file_path'];
         $data['file_size'] = $upload['file_size'];
+        $imagePath = $this->handleDownloadImageUpload();
+        if ($imagePath !== null) {
+            $data['image'] = $imagePath;
+        }
 
         $ok = $model->insert($data);
         if ($ok === false) {
@@ -123,6 +129,10 @@ class Downloads extends BaseController
         if ($upload !== null) {
             $data['file_path'] = $upload['file_path'];
             $data['file_size'] = $upload['file_size'];
+        }
+        $imagePath = $this->handleDownloadImageUpload();
+        if ($imagePath !== null) {
+            $data['image'] = $imagePath;
         }
 
         $ok = (bool) $model->update($id, $data);
@@ -183,17 +193,17 @@ class Downloads extends BaseController
             return $required ? null : null;
         }
 
-        if (! $file->isValid()) {
-            return $required ? null : null;
-        }
-
-        // If no file selected on edit, CI may still return an UploadedFile with error 4.
+        // No file chosen (common when form re-displayed or user didn't select)
         if ($file->getError() === UPLOAD_ERR_NO_FILE) {
             return $required ? null : null;
         }
 
+        if (! $file->isValid()) {
+            return $required ? null : null;
+        }
+
         $ext = strtolower((string) $file->getClientExtension());
-        $allowed = ['pdf', 'zip', 'rar', '7z', 'doc', 'docx', 'ppt', 'pptx', 'mp4'];
+        $allowed = ['pdf', 'zip', 'rar', '7z', 'doc', 'docx', 'ppt', 'pptx', 'mp4', 'epub'];
         if (! in_array($ext, $allowed, true)) {
             return null;
         }
@@ -209,13 +219,61 @@ class Downloads extends BaseController
         }
         $newName = $safeName . '-' . date('YmdHis') . '.' . $ext;
 
-        $file->move($targetDir, $newName, true);
+        if (! $file->move($targetDir, $newName, true)) {
+            return $required ? null : null;
+        }
 
         return [
-            // file_path is relative to public/uploads/
             'file_path' => 'downloads' . '/' . $newName,
             'file_size' => (int) $file->getSize(),
         ];
+    }
+
+    /**
+     * User-friendly message when file upload is missing or invalid.
+     */
+    private function getUploadErrorMessage(): string
+    {
+        $file = $this->request->getFile('file');
+        if ($file !== null && $file->getError() !== UPLOAD_ERR_NO_FILE && $file->getError() !== UPLOAD_ERR_OK) {
+            $errors = [
+                UPLOAD_ERR_INI_SIZE   => 'File exceeds server limit. Try a smaller file.',
+                UPLOAD_ERR_FORM_SIZE  => 'File too large.',
+                UPLOAD_ERR_PARTIAL    => 'Upload was interrupted. Try again.',
+                UPLOAD_ERR_NO_TMP_DIR => 'Server upload error. Try again later.',
+                UPLOAD_ERR_CANT_WRITE => 'Server could not save file. Try again.',
+                UPLOAD_ERR_EXTENSION => 'Upload blocked by server.',
+            ];
+            $msg = $errors[$file->getError()] ?? $file->getErrorString();
+            return 'Upload failed: ' . $msg . ' Allowed types: PDF, ZIP, RAR, 7Z, DOC, DOCX, PPT, PPTX, MP4, EPUB.';
+        }
+        return 'Please upload a file. Allowed: PDF, ZIP, RAR, 7Z, DOC, DOCX, PPT, PPTX, MP4, EPUB.';
+    }
+
+    /**
+     * Handle cover/placeholder image upload for download. Saves to public/uploads/downloads/covers/
+     *
+     * @return string|null Path relative to uploads/ (e.g. downloads/covers/abc.jpg) or null
+     */
+    private function handleDownloadImageUpload(): ?string
+    {
+        $file = $this->request->getFile('cover_image');
+        if ($file === null || ! $file->isValid() || $file->getError() === UPLOAD_ERR_NO_FILE) {
+            return null;
+        }
+        $ext = strtolower((string) $file->getClientExtension());
+        $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        if (! in_array($ext, $allowed, true)) {
+            return null;
+        }
+        $targetDir = FCPATH . 'uploads' . DIRECTORY_SEPARATOR . 'downloads' . DIRECTORY_SEPARATOR . 'covers';
+        if (! is_dir($targetDir)) {
+            mkdir($targetDir, 0775, true);
+        }
+        $safeName = url_title(pathinfo($file->getClientName(), PATHINFO_FILENAME), '-', true) ?: 'cover';
+        $newName = $safeName . '-' . date('YmdHis') . '.' . $ext;
+        $file->move($targetDir, $newName, true);
+        return 'downloads/covers/' . $newName;
     }
 }
 

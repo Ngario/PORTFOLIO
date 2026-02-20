@@ -61,10 +61,19 @@ $action = $mode === 'edit'
 
             <hr class="my-4">
 
+            <div class="mb-3">
+                <label class="form-label">Cover / placeholder image</label>
+                <input type="file" name="cover_image" class="form-control" accept="image/jpeg,image/png,image/gif,image/webp">
+                <div class="form-text">Optional. Shown on download cards. JPG, PNG, GIF, WebP.</div>
+                <?php if ($mode === 'edit' && ! empty($download['image'])): ?>
+                    <p class="small text-muted mt-1 mb-0">Current: <img src="<?= base_url('uploads/' . esc($download['image'])) ?>" alt="" style="max-height:50px;"> <code><?= esc($download['image']) ?></code></p>
+                <?php endif ?>
+            </div>
+
             <div class="mb-2">
                 <label class="form-label"><?= esc($mode === 'edit' ? 'Replace file (optional)' : 'Upload file') ?></label>
                 <input type="file" name="file" class="form-control" <?= $mode === 'edit' ? '' : 'required' ?>>
-                <div class="form-text">Allowed: pdf, zip, rar, 7z, doc/docx, ppt/pptx, mp4</div>
+                <div class="form-text">Allowed: PDF, ZIP, RAR, 7Z, DOC/DOCX, PPT/PPTX, MP4, EPUB (e-books)</div>
             </div>
 
             <?php if ($mode === 'edit' && ! empty($download['file_path'])): ?>

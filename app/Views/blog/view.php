@@ -34,6 +34,9 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 mx-auto">
+                <?php if (! empty($post['image'])): ?>
+                    <img src="<?= base_url('uploads/' . esc($post['image'])) ?>" class="img-fluid rounded mb-4 w-100" alt="" style="max-height:400px;object-fit:cover;">
+                <?php endif ?>
                 <p class="lead"><?= esc($post['excerpt'] ?? '') ?></p>
                 <div class="blog-content"><?= nl2br(esc($post['content'] ?? '')) ?></div>
                 <div class="mt-4">

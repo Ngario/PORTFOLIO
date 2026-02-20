@@ -16,6 +16,11 @@
                         <li class="breadcrumb-item active" aria-current="page"><?= esc($download['title'] ?? '') ?></li>
                     </ol>
                 </nav>
+                <?php if (! empty($download['image'])): ?>
+                    <img src="<?= base_url('uploads/' . esc($download['image'])) ?>" class="img-fluid rounded mb-3" alt="" style="max-height:280px;object-fit:cover;">
+                <?php else: ?>
+                    <div class="bg-secondary rounded d-flex align-items-center justify-content-center text-white mb-3" style="height:200px;"><i class="fas fa-file-alt fa-4x"></i></div>
+                <?php endif ?>
                 <h1 class="h3 mb-3"><?= esc($download['title'] ?? '') ?></h1>
                 <div class="mb-4"><?= nl2br(esc($download['description'] ?? '')) ?></div>
 

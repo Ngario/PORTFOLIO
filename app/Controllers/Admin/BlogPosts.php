@@ -47,6 +47,7 @@ class BlogPosts extends BaseController
                 'content'      => '',
                 'status'       => 'draft',
                 'published_at' => '',
+                'image'        => '',
             ],
             'categories' => $categories,
             'selected'   => [],
@@ -71,6 +72,10 @@ class BlogPosts extends BaseController
             'published_at' => $this->request->getPost('published_at') ?: null,
             'author_id'    => (int) (session()->get('admin_user_id') ?? 0),
         ];
+        $imagePath = $this->handleBlogImageUpload();
+        if ($imagePath !== null) {
+            $data['image'] = $imagePath;
+        }
 
         if ($data['title'] === '' || $data['slug'] === '') {
             return redirect()->back()->withInput()->with('error', 'Title and slug are required.');
@@ -131,6 +136,10 @@ class BlogPosts extends BaseController
             'status'       => (string) ($this->request->getPost('status') ?: 'draft'),
             'published_at' => $this->request->getPost('published_at') ?: null,
         ];
+        $imagePath = $this->handleBlogImageUpload();
+        if ($imagePath !== null) {
+            $data['image'] = $imagePath;
+        }
 
         if ($data['title'] === '' || $data['slug'] === '') {
             return redirect()->back()->withInput()->with('error', 'Title and slug are required.');
@@ -155,6 +164,32 @@ class BlogPosts extends BaseController
         $model->delete($id);
 
         return redirect()->to(base_url('admin/blog-posts'))->with('success', 'Post deleted.');
+    }
+
+    /**
+     * Handle featured image upload for blog post. Saves to public/uploads/blog_posts/
+     *
+     * @return string|null Path relative to uploads/ (e.g. blog_posts/abc.jpg) or null
+     */
+    private function handleBlogImageUpload(): ?string
+    {
+        $file = $this->request->getFile('image');
+        if ($file === null || ! $file->isValid() || $file->getError() === UPLOAD_ERR_NO_FILE) {
+            return null;
+        }
+        $ext = strtolower((string) $file->getClientExtension());
+        $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        if (! in_array($ext, $allowed, true)) {
+            return null;
+        }
+        $targetDir = FCPATH . 'uploads' . DIRECTORY_SEPARATOR . 'blog_posts';
+        if (! is_dir($targetDir)) {
+            mkdir($targetDir, 0775, true);
+        }
+        $safeName = url_title(pathinfo($file->getClientName(), PATHINFO_FILENAME), '-', true) ?: 'image';
+        $newName = $safeName . '-' . date('YmdHis') . '.' . $ext;
+        $file->move($targetDir, $newName, true);
+        return 'blog_posts/' . $newName;
     }
 
     /**

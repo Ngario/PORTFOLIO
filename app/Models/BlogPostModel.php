@@ -30,6 +30,7 @@ class BlogPostModel extends Model
         'author_id',
         'status',
         'published_at',
+        'image',
     ];
 
     /**

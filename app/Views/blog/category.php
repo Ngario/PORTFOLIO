@@ -34,6 +34,11 @@
                 <div class="col-md-6 col-lg-4">
                     <article class="card h-100 shadow-sm border-0 overflow-hidden">
                         <a href="<?= base_url('blog/' . ($post['slug'] ?? $post['id'])) ?>" class="text-decoration-none text-dark">
+                            <?php if (! empty($post['image'])): ?>
+                                <img src="<?= base_url('uploads/' . esc($post['image'])) ?>" class="card-img-top" alt="" style="object-fit:cover;height:180px;">
+                            <?php else: ?>
+                                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center text-white" style="height:180px;"><i class="fas fa-newspaper fa-3x"></i></div>
+                            <?php endif ?>
                             <div class="card-body">
                                 <h5 class="card-title"><?= esc($post['title']) ?></h5>
                                 <p class="card-text text-muted small"><?= esc($post['excerpt'] ?? '') ?></p>
