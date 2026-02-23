@@ -132,12 +132,21 @@ try {
                 
                 <!-- CONTACT -->
                 <li class="nav-item">
-                    <a class="nav-link <?= $uri === 'contact' ? 'active' : '' ?>" 
+                    <a class="nav-link <?= $uri === 'contact' ? 'active' : '' ?>"
                        href="<?= base_url('contact') ?>">
                         <i class="fas fa-envelope me-1"></i> Contact
                     </a>
                 </li>
-                
+
+                <!-- SEARCH: links to search page where user can type and filter FAQs -->
+                <li class="nav-item">
+                    <a class="nav-link <?= $uri === 'search' ? 'active' : '' ?>"
+                       href="<?= base_url('search') ?>"
+                       aria-label="Search">
+                        <i class="fas fa-search me-1"></i> Search
+                    </a>
+                </li>
+
             </ul>
             
             <!-- 

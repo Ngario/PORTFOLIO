@@ -68,6 +68,8 @@ $routes->get('contact', 'Pages::contact');
 $routes->post('contact/send', 'Pages::sendMessage');  // Form submission
 $routes->get('terms', 'Pages::terms');
 $routes->get('privacy', 'Pages::privacy');
+$routes->get('faqs', 'Pages::faqs');
+$routes->get('search', 'Pages::search');
 $routes->get('download-cv', 'Pages::downloadCv'); // Public CV download (no login required)
 
 // ============================================

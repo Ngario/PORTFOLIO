@@ -81,6 +81,11 @@
                             <i class="fas fa-chevron-right me-2"></i>Blog
                         </a>
                     </li>
+                    <li class="mb-2">
+                        <a href="<?= base_url('faqs') ?>" class="text-white-50 text-decoration-none">
+                            <i class="fas fa-chevron-right me-2"></i>FAQs
+                        </a>
+                    </li>
                 </ul>
             </div>
             

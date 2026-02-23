@@ -147,6 +147,92 @@ class Pages extends BaseController
     }
 
     /**
+     * FAQs Page
+     *
+     * URL: /faqs
+     * Shows frequently asked questions in an accordion.
+     * FAQ data is kept here for now; you can later move it to a database table.
+     */
+    public function faqs()
+    {
+        $data = [
+            'title' => 'FAQs',
+            'description' => 'Frequently asked questions about my services, downloads, and how to get started',
+            'faqs' => $this->getFaqs(),
+        ];
+        
+        return view('pages/faqs', $data);
+    }
+
+    /**
+     * Search Page
+     *
+     * URL: /search or /search?q=keyword
+     * Filters FAQs by the search term and shows results. Actionable: user types and sees matching FAQs.
+     */
+    public function search()
+    {
+        $query = $this->request->getGet('q');
+        $query = is_string($query) ? trim($query) : '';
+        $allFaqs = $this->getFaqs();
+        
+        if ($query !== '') {
+            $queryLower = mb_strtolower($query);
+            $allFaqs = array_filter($allFaqs, static function ($faq) use ($queryLower) {
+                $question = mb_strtolower($faq['question'] ?? '');
+                $answer = mb_strtolower($faq['answer'] ?? '');
+                return str_contains($question, $queryLower) || str_contains($answer, $queryLower);
+            });
+            $allFaqs = array_values($allFaqs); // re-index 0, 1, 2...
+        }
+        
+        $data = [
+            'title' => 'Search',
+            'description' => 'Search FAQs and site content',
+            'query' => $query,
+            'faqs' => $allFaqs,
+        ];
+        
+        return view('pages/search', $data);
+    }
+
+    /**
+     * Returns the list of FAQs (question + answer).
+     * Shared by faqs() and search(). Later you can load from database instead.
+     *
+     * @return array<int, array{question: string, answer: string}>
+     */
+    private function getFaqs(): array
+    {
+        return [
+            [
+                'question' => 'How do I download a resource?',
+                'answer' => 'Create an account or log in, then go to Downloads. Click the resource you want and use the download button. Some items are free; others may require purchase or membership.',
+            ],
+            [
+                'question' => 'Do I need to create an account?',
+                'answer' => 'For free public downloads you can browse without an account. To download files and access member-only content, you need to register. Registration is free.',
+            ],
+            [
+                'question' => 'How can I contact you for a project?',
+                'answer' => 'Use the Contact page to send a message. You can also reach me via the email or phone listed in the footer. I typically reply within 1–2 business days.',
+            ],
+            [
+                'question' => 'What payment methods do you accept?',
+                'answer' => 'For paid downloads and services, payment options are shown at checkout. This site may support M-Pesa and other methods depending on configuration.',
+            ],
+            [
+                'question' => 'Can I use your code or templates in my projects?',
+                'answer' => 'It depends on the license of each resource. Check the download or project page for licensing terms. Many resources are for personal or commercial use with attribution.',
+            ],
+            [
+                'question' => 'Where can I see your portfolio projects?',
+                'answer' => 'Go to the Projects page from the main menu or homepage. Each project has a description, technologies used, and links to live demos or repositories where applicable.',
+            ],
+        ];
+    }
+
+    /**
      * Public CV download (FREE for everyone)
      *
      * URL: /download-cv
