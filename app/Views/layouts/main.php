@@ -43,12 +43,16 @@
     
     <!-- Footer -->
     <?= $this->include('components/footer') ?>
+
+    <!-- Chatbot widget (floating button + panel, uses FAQ data from DB) -->
+    <?= $this->include('components/chat_widget') ?>
     
     <!-- Bootstrap 5 JS Bundle (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Custom JavaScript -->
     <script src="<?= base_url('js/main.js') ?>"></script>
+    <script src="<?= base_url('js/chat.js') ?>"></script>
     
     <!-- Additional Scripts per page -->
     <?= $this->renderSection('scripts') ?>

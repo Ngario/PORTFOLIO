@@ -26,6 +26,7 @@ $isLoggedIn = (bool) session()->get('admin_logged_in');
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="<?= base_url('admin/projects') ?>">Projects</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?= base_url('admin/blog-posts') ?>">Blog Posts</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= base_url('admin/faqs') ?>">FAQs</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="adminDownloadsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Downloads

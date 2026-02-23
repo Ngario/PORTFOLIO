@@ -58,7 +58,16 @@ $routes->group('admin', ['filter' => 'adminauth'], static function ($routes) {
     $routes->get('download-categories/(:num)/edit', 'Admin\\DownloadCategories::edit/$1');
     $routes->post('download-categories/(:num)', 'Admin\\DownloadCategories::update/$1');
     $routes->post('download-categories/(:num)/delete', 'Admin\\DownloadCategories::delete/$1');
+
+    // FAQs (used by public FAQs page, search, and chatbot)
+    $routes->get('faqs', 'Admin\\Faqs::index');
+    $routes->get('faqs/new', 'Admin\\Faqs::new');
+    $routes->post('faqs', 'Admin\\Faqs::create');
+    $routes->get('faqs/(:num)/edit', 'Admin\\Faqs::edit/$1');
+    $routes->post('faqs/(:num)', 'Admin\\Faqs::update/$1');
+    $routes->post('faqs/(:num)/delete', 'Admin\\Faqs::delete/$1');
 });
+// Note: Admin FAQ URLs are /admin/faqs, /admin/faqs/new, etc. (group prefix is 'admin')
 
 // ============================================
 // STATIC PAGES (About, Contact, Terms, Privacy)
@@ -70,6 +79,7 @@ $routes->get('terms', 'Pages::terms');
 $routes->get('privacy', 'Pages::privacy');
 $routes->get('faqs', 'Pages::faqs');
 $routes->get('search', 'Pages::search');
+$routes->post('chat/message', 'Chat::message');  // Chatbot API (returns JSON)
 $routes->get('download-cv', 'Pages::downloadCv'); // Public CV download (no login required)
 
 // ============================================
