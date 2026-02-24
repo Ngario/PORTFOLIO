@@ -191,21 +191,25 @@ class Pages extends BaseController
      * Public CV download (FREE for everyone)
      *
      * URL: /download-cv
-     *
-     * Put your CV file here:
-     *   public/uploads/cv/cv.pdf
-     *
-     * Then this method will serve it as a download.
+     * Serves the CV from the database (cv_storage table). Admin uploads/updates it at /admin/cv.
      */
     public function downloadCv()
     {
-        $path = FCPATH . 'uploads' . DIRECTORY_SEPARATOR . 'cv' . DIRECTORY_SEPARATOR . 'cv.pdf';
-        $path = realpath($path);
+        $model = model(\App\Models\CvStorageModel::class);
+        $cv = $model->getCv();
 
-        if ($path === false || ! is_file($path)) {
-            return $this->response->setStatusCode(404)->setBody('CV file not found. Add it to public/uploads/cv/cv.pdf');
+        if (! $cv || empty($cv['content'])) {
+            return $this->response->setStatusCode(404)->setBody('CV not available yet. Check back later.');
         }
 
-        return $this->response->download($path, null, true);
+        $filename = ! empty($cv['filename']) ? $cv['filename'] : 'CV.pdf';
+        $mimeType = $cv['mime_type'] ?? 'application/pdf';
+
+        $this->response
+            ->setHeader('Content-Type', $mimeType)
+            ->setHeader('Content-Disposition', 'attachment; filename="' . $filename . '"')
+            ->setBody($cv['content']);
+
+        return $this->response;
     }
 }

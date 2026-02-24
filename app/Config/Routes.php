@@ -66,8 +66,12 @@ $routes->group('admin', ['filter' => 'adminauth'], static function ($routes) {
     $routes->get('faqs/(:num)/edit', 'Admin\\Faqs::edit/$1');
     $routes->post('faqs/(:num)', 'Admin\\Faqs::update/$1');
     $routes->post('faqs/(:num)/delete', 'Admin\\Faqs::delete/$1');
+
+    // CV (stored in DB; public /download-cv serves it)
+    $routes->get('cv', 'Admin\\Cv::index');
+    $routes->post('cv/upload', 'Admin\\Cv::upload');
 });
-// Note: Admin FAQ URLs are /admin/faqs, /admin/faqs/new, etc. (group prefix is 'admin')
+// Note: Admin URLs use prefix 'admin' (e.g. /admin/faqs, /admin/cv)
 
 // ============================================
 // STATIC PAGES (About, Contact, Terms, Privacy)
