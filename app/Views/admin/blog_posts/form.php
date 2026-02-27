@@ -27,17 +27,18 @@ $action = $mode === 'edit'
 
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label">Status</label>
+                    <label class="form-label fw-semibold">Visibility: Published or Draft?</label>
                     <?php $status = old('status', $post['status'] ?? 'draft'); ?>
                     <select name="status" class="form-select">
-                        <option value="draft" <?= $status === 'draft' ? 'selected' : '' ?>>Draft</option>
-                        <option value="published" <?= $status === 'published' ? 'selected' : '' ?>>Published</option>
+                        <option value="draft" <?= $status === 'draft' ? 'selected' : '' ?>>Draft — hidden from the site (only you see it)</option>
+                        <option value="published" <?= $status === 'published' ? 'selected' : '' ?>>Published — visible on the blog and in “View all posts”</option>
                     </select>
-                    <div class="form-text">Public blog page only shows <code>published</code> posts.</div>
+                    <div class="form-text">Choose <strong>Published</strong> if the post should appear on the site. Choose <strong>Draft</strong> to keep it private until you’re ready.</div>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Published at</label>
                     <input name="published_at" class="form-control" value="<?= esc(old('published_at', $post['published_at'] ?? '')) ?>" placeholder="YYYY-MM-DD HH:MM:SS">
+                    <div class="form-text">Optional. When the post went (or will go) live. Can be left blank.</div>
                 </div>
             </div>
 
@@ -56,8 +57,8 @@ $action = $mode === 'edit'
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Categories</label>
-                <select class="form-select" name="categories[]" multiple size="6">
+                <label class="form-label">Categories <span class="text-muted fw-normal">(optional)</span></label>
+                <select class="form-select" name="categories[]" multiple size="5">
                     <?php foreach (($categories ?? []) as $cat): ?>
                         <?php $id = (int) ($cat['id'] ?? 0); ?>
                         <option value="<?= esc($id) ?>" <?= in_array($id, $selected ?? [], true) ? 'selected' : '' ?>>
@@ -65,7 +66,7 @@ $action = $mode === 'edit'
                         </option>
                     <?php endforeach ?>
                 </select>
-                <div class="form-text">Hold Ctrl (Windows) to select multiple.</div>
+                <div class="form-text">Categories group posts by topic (e.g. Tutorials, News). They do <strong>not</strong> control visibility — use Status above for that. Hold Ctrl (Windows) to select more than one.</div>
             </div>
 
             <div class="mt-4">
