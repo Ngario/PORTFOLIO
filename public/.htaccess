@@ -2,6 +2,15 @@
 Options -Indexes
 
 # ----------------------------------------------------------------------
+# PHP upload limits (for admin uploads: downloads, blog images, CV, etc.)
+# Requires Apache + mod_php. On PHP-FPM or CGI, set these in php.ini instead.
+# ----------------------------------------------------------------------
+<IfModule mod_php.c>
+	php_value upload_max_filesize 128M
+	php_value post_max_size 128M
+</IfModule>
+
+# ----------------------------------------------------------------------
 # Rewrite engine
 # ----------------------------------------------------------------------
 
