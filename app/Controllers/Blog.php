@@ -112,18 +112,23 @@ class Blog extends BaseController
     }
 
     /**
-     * Load all posts from the database.
+     * Load all posts from the database (published only).
      * Returns null only when the DB/table is not available.
+     * Tries with author join first; if that fails (e.g. users table issue), tries without join.
      *
      * @return array<int, array<string, mixed>>|null
      */
     private function getPostsFromDb(): ?array
     {
+        $model = model(BlogPostModel::class);
         try {
-            $model = model(BlogPostModel::class);
-            return $model->getPosts();
-        } catch (\Throwable) {
-            return null;
+            return $model->getPosts('published_at', 'DESC', true);
+        } catch (\Throwable $e) {
+            try {
+                return $model->getPosts('published_at', 'DESC', false);
+            } catch (\Throwable) {
+                return null;
+            }
         }
     }
 

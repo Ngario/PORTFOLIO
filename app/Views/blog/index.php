@@ -20,6 +20,9 @@
 
 <section class="section">
     <div class="container">
+        <?php if (empty($posts)): ?>
+            <div class="alert alert-info text-center py-4">No blog posts yet. Check back later or visit the <a href="<?= base_url() ?>">homepage</a>.</div>
+        <?php endif ?>
         <div class="row g-4">
             <?php foreach ($posts as $post): ?>
             <div class="col-md-6 col-lg-4">

@@ -35,11 +35,12 @@
                 <?php foreach ($downloads as $d): ?>
                     <div class="col-md-6 col-lg-4">
                         <div class="card h-100 shadow-sm overflow-hidden">
-                            <?php if (! empty($d['image'])): ?>
-                                <img src="<?= base_url('uploads/' . esc($d['image'])) ?>" class="card-img-top" alt="" style="object-fit:cover;height:160px;">
-                            <?php else: ?>
-                                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center text-white" style="height:160px;"><i class="fas fa-file-alt fa-3x"></i></div>
-                            <?php endif ?>
+                            <?php
+                            $imgSrc = ! empty($d['image']) ? base_url('uploads/' . esc($d['image'])) : base_url('images/placeholder-download.svg');
+                            $placeholderUrl = base_url('images/placeholder-download.svg');
+                            ?>
+                            <img src="<?= $imgSrc ?>" class="card-img-top" alt="" style="object-fit:cover;height:160px;background:#e9ecef;"
+                                 onerror="this.onerror=null; this.src='<?= esc($placeholderUrl) ?>';">
                             <div class="card-body">
                                 <h5 class="card-title"><?= esc($d['title'] ?? '') ?></h5>
                                 <p class="card-text small text-muted"><?= esc(mb_substr(strip_tags($d['description'] ?? ''), 0, 100)) ?>…</p>
