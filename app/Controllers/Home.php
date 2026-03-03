@@ -59,21 +59,30 @@ class Home extends BaseController
         $data['services'] = [];
         
         // ============================================
-        // STEP 4: FETCH BLOG POSTS DATA
+        // STEP 4: FETCH BLOG POSTS DATA (from database only)
         // ============================================
-        // TODO: Uncomment when BlogModel is created
-        /*
-        $blogModel = new \App\Models\BlogModel();
-        
-        // Get 3 latest published blog posts
-        $data['blogs'] = $blogModel
-            ->where('status', 'published')
-            ->orderBy('published_at', 'DESC')
-            ->limit(3)
-            ->find();
-        */
-        
         $data['blogs'] = [];
+        try {
+            $blogModel = model(\App\Models\BlogPostModel::class);
+            $posts = $blogModel->getPosts('published_at', 'DESC', false);
+            $posts = array_slice($posts, 0, 3);
+            foreach ($posts as $post) {
+                $data['blogs'][] = [
+                    'title'          => $post['title'] ?? '',
+                    'slug'           => $post['slug'] ?? '',
+                    'content'        => $post['content'] ?? '',
+                    'excerpt'        => $post['excerpt'] ?? '',
+                    'published_at'   => $post['published_at'] ?? $post['created_at'] ?? null,
+                    'created_at'     => $post['created_at'] ?? null,
+                    'featured_image' => ! empty($post['image'])
+                        ? base_url('uploads/' . $post['image'])
+                        : base_url('images/placeholder-download.svg'),
+                    'category_name'  => $post['category_name'] ?? '',
+                ];
+            }
+        } catch (\Throwable $e) {
+            $data['blogs'] = [];
+        }
         
         // ============================================
         // STEP 5: FETCH ABOUT PAGE CONTENT

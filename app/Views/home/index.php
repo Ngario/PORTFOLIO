@@ -379,33 +379,25 @@ Welcome to my professional portfolio. Explore my projects, services, downloads, 
         
         <div class="row g-4">
             <?php if (isset($blogs) && !empty($blogs)): ?>
-                <!-- Loop through blog posts from database -->
                 <?php foreach ($blogs as $blog): ?>
                     <div class="col-md-6 col-lg-4 animate-on-scroll">
                         <div class="card custom-card">
-                            <img src="<?= esc($blog['featured_image'] ?? 'https://via.placeholder.com/400x250?text=Blog+Post') ?>" 
+                            <img src="<?= esc($blog['featured_image'] ?? base_url('images/placeholder-download.svg')) ?>" 
                                  class="card-img-top" 
                                  alt="<?= esc($blog['title']) ?>">
                             <div class="card-body">
-                                <!-- Category badge -->
                                 <?php if (!empty($blog['category_name'])): ?>
-                                    <span class="badge bg-success mb-2">
-                                        <?= esc($blog['category_name']) ?>
-                                    </span>
+                                    <span class="badge bg-success mb-2"><?= esc($blog['category_name']) ?></span>
                                 <?php endif; ?>
-                                
                                 <h5 class="card-title"><?= esc($blog['title']) ?></h5>
-                                
                                 <p class="card-text text-muted small">
                                     <i class="fas fa-calendar me-2"></i>
-                                    <?= date('M d, Y', strtotime($blog['published_at'] ?? $blog['created_at'])) ?>
+                                    <?= ! empty($blog['published_at']) ? date('M d, Y', strtotime($blog['published_at'])) : ( ! empty($blog['created_at']) ? date('M d, Y', strtotime($blog['created_at'])) : '' ) ?>
                                 </p>
-                                
                                 <p class="card-text">
-                                    <?= esc(substr(strip_tags($blog['content']), 0, 120)) ?>...
+                                    <?= esc(mb_substr(strip_tags($blog['content'] ?? ''), 0, 120)) ?>...
                                 </p>
-                                
-                                <a href="<?= base_url('blog/' . $blog['slug']) ?>" class="btn btn-sm btn-outline-primary">
+                                <a href="<?= base_url('blog/' . ($blog['slug'] ?? '')) ?>" class="btn btn-sm btn-outline-primary">
                                     Read More <i class="fas fa-arrow-right ms-1"></i>
                                 </a>
                             </div>
@@ -413,59 +405,8 @@ Welcome to my professional portfolio. Explore my projects, services, downloads, 
                     </div>
                 <?php endforeach; ?>
             <?php else: ?>
-                <!-- Placeholder blog posts with your actual images -->
-                <div class="col-md-6 col-lg-4 animate-on-scroll">
-                    <div class="card custom-card">
-                        <img src="<?= base_url('images/blog/Ai.jpg') ?>" 
-                             class="card-img-top" 
-                             alt="AI and Machine Learning">
-                        <div class="card-body">
-                            <span class="badge bg-success mb-2">Technology</span>
-                            <h5 class="card-title">The Future of AI in our worplace</h5>
-                            <p class="card-text text-muted small">
-                                <i class="fas fa-calendar me-2"></i><?= date('M d, Y') ?>
-                            </p>
-                            <p class="card-text">
-                                Exploring how AI is transforming the way we work and live in our workplaces.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6 col-lg-4 animate-on-scroll">
-                    <div class="card custom-card">
-                        <img src="<?= base_url('images/blog/financial.jpg') ?>" 
-                             class="card-img-top" 
-                             alt="Financial Management">
-                        <div class="card-body">
-                            <span class="badge bg-success mb-2">Finance</span>
-                            <h5 class="card-title">Smart Financial Planning for young Kenyans</h5>
-                            <p class="card-text text-muted small">
-                                <i class="fas fa-calendar me-2"></i><?= date('M d, Y') ?>
-                            </p>
-                            <p class="card-text">
-                                Essential financial tips and strategies for young Kenyans to manage income and grow wealth.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6 col-lg-4 animate-on-scroll">
-                    <div class="card custom-card">
-                        <img src="<?= base_url('images/blog/food.jpg') ?>" 
-                             class="card-img-top" 
-                             alt="Cooking and Nutrition">
-                        <div class="card-body">
-                            <span class="badge bg-success mb-2">Health & Lifestyle</span>
-                            <h5 class="card-title">Healthy Eating Habits for all </h5>
-                            <p class="card-text text-muted small">
-                                <i class="fas fa-calendar me-2"></i><?= date('M d, Y') ?>
-                            </p>
-                            <p class="card-text">
-                                Quick and nutritious diet ideas, recipes and exercise patterns for all classes of people.
-                            </p>
-                        </div>
-                    </div>
+                <div class="col-12 text-center py-4 text-muted">
+                    <p class="mb-0">No blog posts yet. New posts from the admin will appear here.</p>
                 </div>
             <?php endif; ?>
         </div>
