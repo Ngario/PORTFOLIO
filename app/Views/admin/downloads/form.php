@@ -38,6 +38,12 @@ $action = $mode === 'edit'
                 <textarea name="description" rows="5" class="form-control"><?= esc(old('description', $download['description'] ?? '')) ?></textarea>
             </div>
 
+            <div class="mb-3">
+                <label class="form-label">Installation instructions <span class="text-muted">(optional, for software)</span></label>
+                <textarea name="installation_instructions" rows="6" class="form-control" placeholder="e.g. 1. Download the ZIP and extract. 2. Run setup.exe as administrator. 3. Follow the wizard."><?= esc(old('installation_instructions', $download['installation_instructions'] ?? '')) ?></textarea>
+                <div class="form-text">Step-by-step instructions for installing the software. Shown on the download page. Leave blank for non-software items.</div>
+            </div>
+
             <div class="row g-3">
                 <div class="col-md-4">
                     <div class="form-check mt-4">
@@ -72,8 +78,8 @@ $action = $mode === 'edit'
 
             <div class="mb-2">
                 <label class="form-label"><?= esc($mode === 'edit' ? 'Replace file (optional)' : 'Upload file') ?></label>
-                <input type="file" name="file" class="form-control" <?= $mode === 'edit' ? '' : 'required' ?>>
-                <div class="form-text">Allowed: PDF, ZIP, RAR, 7Z, DOC/DOCX, PPT/PPTX, MP4, EPUB (e-books)</div>
+                <input type="file" name="file" id="download-file-input" class="form-control" <?= $mode === 'edit' ? '' : 'required' ?>>
+                <div class="form-text" id="file-allowed-hint">Allowed: PDF, ZIP, RAR, 7Z, DOC/DOCX, PPT/PPTX, MP4, EPUB. <strong>Software category: compressed files only (ZIP, RAR, 7Z).</strong> Large files supported (up to 512 MB).</div>
             </div>
 
             <?php if ($mode === 'edit' && ! empty($download['file_path'])): ?>

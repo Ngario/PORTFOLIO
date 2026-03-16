@@ -12,8 +12,8 @@
     <meta name="keywords" content="portfolio, web developer, projects, downloads, services">
     <meta name="author" content="Your Name">
     
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/png" href="<?= base_url('favicon.ico') ?>">
+    <!-- Favicon: use public/images/logo.png (or public/favicon.ico if you add one) -->
+    <link rel="icon" type="image/png" href="<?= base_url('images/logo.png') ?>">
     
     <!-- Bootstrap 5 CSS - Responsive Framework -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">

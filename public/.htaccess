@@ -2,12 +2,15 @@
 Options -Indexes
 
 # ----------------------------------------------------------------------
-# PHP upload limits (for admin uploads: downloads, blog images, CV, etc.)
-# Requires Apache + mod_php. On PHP-FPM or CGI, set these in php.ini instead.
+# Allow large uploads (software .zip/.rar can be hundreds of MB)
+# 413 Request Entity Too Large = Apache limit; set here and/or in httpd.conf
 # ----------------------------------------------------------------------
+# Apache: max request body (1 GB). Prevents "413 Request Entity Too Large".
+LimitRequestBody 1073741824
+
 <IfModule mod_php.c>
-	php_value upload_max_filesize 128M
-	php_value post_max_size 128M
+	php_value upload_max_filesize 512M
+	php_value post_max_size 512M
 </IfModule>
 
 # ----------------------------------------------------------------------

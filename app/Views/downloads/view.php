@@ -25,6 +25,15 @@
                 <h1 class="h3 mb-3"><?= esc($download['title'] ?? '') ?></h1>
                 <div class="mb-4"><?= nl2br(esc($download['description'] ?? '')) ?></div>
 
+                <?php if (! empty($download['installation_instructions'])): ?>
+                    <div class="card bg-light border-0 mb-4">
+                        <div class="card-body">
+                            <h2 class="h6 mb-2"><i class="fas fa-cog me-2"></i>Installation instructions</h2>
+                            <div class="small"><?= nl2br(esc($download['installation_instructions'])) ?></div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
                 <?php if (session()->get('user_id')): ?>
                     <a href="<?= base_url('download/file/' . $download['id']) ?>" class="btn btn-primary">
                         <i class="fas fa-download me-1"></i> Download

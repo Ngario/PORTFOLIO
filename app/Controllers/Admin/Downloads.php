@@ -48,15 +48,16 @@ class Downloads extends BaseController
             'title'      => 'New Download',
             'mode'       => 'create',
             'download'   => [
-                'category_id' => '',
-                'title'       => '',
-                'description' => '',
-                'image'       => '',
-                'is_paid'     => 0,
-                'price'       => '',
-                'is_active'   => 1,
-                'file_path'   => '',
-                'file_size'   => '',
+                'category_id'               => '',
+                'title'                     => '',
+                'description'               => '',
+                'installation_instructions' => '',
+                'image'                     => '',
+                'is_paid'                   => 0,
+                'price'                     => '',
+                'is_active'                 => 1,
+                'file_path'                 => '',
+                'file_size'                 => '',
             ],
             'categories' => $categories,
         ]);
@@ -171,17 +172,19 @@ class Downloads extends BaseController
         $isActive = $this->request->getPost('is_active') ? 1 : 0;
 
         return [
-            'category_id' => $categoryId,
-            'title'       => $title,
-            'description' => (string) $this->request->getPost('description'),
-            'is_paid'     => $isPaid,
-            'price'       => $isPaid ? $price : null,
-            'is_active'   => $isActive,
+            'category_id'               => $categoryId,
+            'title'                     => $title,
+            'description'               => (string) $this->request->getPost('description'),
+            'installation_instructions' => trim((string) $this->request->getPost('installation_instructions')),
+            'is_paid'                   => $isPaid,
+            'price'                     => $isPaid ? $price : null,
+            'is_active'                 => $isActive,
         ];
     }
 
     /**
      * Handle file upload from form input name="file".
+     * For Software category: only compressed files (.zip, .rar, .7z) are allowed.
      *
      * @param bool $required If true, upload is required.
      * @return array{file_path: string, file_size: int}|null
@@ -193,7 +196,6 @@ class Downloads extends BaseController
             return $required ? null : null;
         }
 
-        // No file chosen (common when form re-displayed or user didn't select)
         if ($file->getError() === UPLOAD_ERR_NO_FILE) {
             return $required ? null : null;
         }
@@ -203,9 +205,19 @@ class Downloads extends BaseController
         }
 
         $ext = strtolower((string) $file->getClientExtension());
-        $allowed = ['pdf', 'zip', 'rar', '7z', 'doc', 'docx', 'ppt', 'pptx', 'mp4', 'epub'];
-        if (! in_array($ext, $allowed, true)) {
-            return null;
+        $categoryId = (int) $this->request->getPost('category_id');
+        $isSoftware = $this->isSoftwareCategory($categoryId);
+
+        if ($isSoftware) {
+            $allowed = ['zip', 'rar', '7z'];
+            if (! in_array($ext, $allowed, true)) {
+                return null;
+            }
+        } else {
+            $allowed = ['pdf', 'zip', 'rar', '7z', 'doc', 'docx', 'ppt', 'pptx', 'mp4', 'epub'];
+            if (! in_array($ext, $allowed, true)) {
+                return null;
+            }
         }
 
         $targetDir = FCPATH . 'uploads' . DIRECTORY_SEPARATOR . 'downloads';
@@ -237,17 +249,29 @@ class Downloads extends BaseController
         $file = $this->request->getFile('file');
         if ($file !== null && $file->getError() !== UPLOAD_ERR_NO_FILE && $file->getError() !== UPLOAD_ERR_OK) {
             $errors = [
-                UPLOAD_ERR_INI_SIZE   => 'File exceeds server limit. Try a smaller file.',
+                UPLOAD_ERR_INI_SIZE   => 'File exceeds server limit. Increase upload limits (see UPLOAD_LIMITS.md) or use a smaller file.',
                 UPLOAD_ERR_FORM_SIZE  => 'File too large.',
                 UPLOAD_ERR_PARTIAL    => 'Upload was interrupted. Try again.',
                 UPLOAD_ERR_NO_TMP_DIR => 'Server upload error. Try again later.',
                 UPLOAD_ERR_CANT_WRITE => 'Server could not save file. Try again.',
-                UPLOAD_ERR_EXTENSION => 'Upload blocked by server.',
+                UPLOAD_ERR_EXTENSION  => 'Upload blocked by server.',
             ];
             $msg = $errors[$file->getError()] ?? $file->getErrorString();
-            return 'Upload failed: ' . $msg . ' Allowed types: PDF, ZIP, RAR, 7Z, DOC, DOCX, PPT, PPTX, MP4, EPUB.';
+            return 'Upload failed: ' . $msg . ' For Software use ZIP, RAR, or 7Z only. Other categories: PDF, ZIP, RAR, 7Z, DOC, DOCX, PPT, PPTX, MP4, EPUB.';
         }
-        return 'Please upload a file. Allowed: PDF, ZIP, RAR, 7Z, DOC, DOCX, PPT, PPTX, MP4, EPUB.';
+        return 'Please upload a file. For Software category: compressed files only (ZIP, RAR, 7Z). Other categories: PDF, ZIP, RAR, 7Z, DOC, DOCX, PPT, PPTX, MP4, EPUB.';
+    }
+
+    /**
+     * Check if the given category ID is the "Software" category (slug = software).
+     */
+    private function isSoftwareCategory(int $categoryId): bool
+    {
+        if ($categoryId <= 0) {
+            return false;
+        }
+        $row = Database::connect()->table('download_categories')->where('id', $categoryId)->get()->getRowArray();
+        return isset($row['slug']) && strtolower($row['slug']) === 'software';
     }
 
     /**

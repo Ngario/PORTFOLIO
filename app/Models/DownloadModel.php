@@ -18,7 +18,7 @@ class DownloadModel extends Model
     protected $returnType = 'array';
     protected $useTimestamps = false;
     protected $allowedFields = [
-        'category_id', 'title', 'description', 'image', 'file_path', 'file_size',
+        'category_id', 'title', 'description', 'installation_instructions', 'image', 'file_path', 'file_size',
         'is_paid', 'price', 'is_active',
     ];
 

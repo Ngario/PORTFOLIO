@@ -35,12 +35,16 @@ try {
     <div class="container">
         <!-- 
             LOGO / BRAND 
-            Clicking this always goes to homepage
+            Put your logo at: public/images/logo.png (PNG or JPG). Falls back to text if missing.
         -->
-        <a class="navbar-brand fw-bold" href="<?= base_url('/') ?>">
-            <i class="fas fa-code me-2"></i>
-            <!-- Replace "Your Name" with your actual name -->
-            My<span class="text-primary">Portfolio</span>
+        <a class="navbar-brand d-flex align-items-center" href="<?= base_url('/') ?>">
+            <?php
+            $logoFile = is_file(FCPATH . 'images' . DIRECTORY_SEPARATOR . 'logo.png') ? 'logo.png' : (is_file(FCPATH . 'images' . DIRECTORY_SEPARATOR . 'logo.jpg') ? 'logo.jpg' : null);
+            ?>
+            <?php if ($logoFile): ?>
+                <img src="<?= base_url('images/' . $logoFile) ?>" alt="Logo" class="me-2" style="height: 80px; width: auto; background: transparent;">
+            <?php endif; ?>
+            <span class="fw-bold fs-5">My<span class="text-primary">Portfolio</span></span>
         </a>
         
         <!-- 

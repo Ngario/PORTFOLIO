@@ -56,9 +56,10 @@ a:hover {
    3. NAVIGATION BAR ENHANCEMENTS
    ============================================ */
 
-/* Make navbar shadow for depth */
+/* Make navbar shadow for depth and darker background to blend with logo */
 .navbar {
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    background-color: #05010a !important; /* darker than bg-dark to hide logo rectangle */
 }
 
 /* Active link indicator */
