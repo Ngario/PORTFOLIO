@@ -11,8 +11,7 @@ use App\Models\ProjectModel;
  *   GET /projects         → index()  = list all projects
  *   GET /projects/123     → view(123) = single project by ID
  *
- * Uses ProjectModel when the `projects` table exists (after "php spark migrate").
- * Falls back to placeholder data otherwise so the site still works.
+ * Uses ProjectModel (`projects` table). All content should come from the database (no placeholders).
  */
 class Projects extends BaseController
 {
@@ -24,7 +23,7 @@ class Projects extends BaseController
     {
         $projects = $this->getProjectsFromDb();
         if ($projects === null) {
-            $projects = $this->getPlaceholderProjects();
+            $projects = [];
         }
 
         $data = [
@@ -59,18 +58,9 @@ class Projects extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        // If DB isn't available, fall back to placeholder data.
-        if (!$dbOk) {
-            $projects = $this->getPlaceholderProjects();
-            foreach ($projects as $p) {
-                if ((int) $p['id'] === $id) {
-                    $project = $p;
-                    break;
-                }
-            }
-            if ($project === null) {
-                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-            }
+        // No placeholders: if DB isn't available, behave as 404 (content is DB-backed).
+        if (! $dbOk || $project === null) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
         $data = [
@@ -113,46 +103,4 @@ class Projects extends BaseController
         }
     }
 
-    /**
-     * Placeholder data when the database table doesn't exist yet.
-     * @return array<int, array<string, mixed>>
-     */
-    private function getPlaceholderProjects(): array
-    {
-        return [
-            [
-                'id'          => 1,
-                'title'       => 'E-Commerce Platform',
-                'slug'        => 'ecommerce-platform',
-                'description' => 'A custom e-commerce solution built with CodeIgniter 4 and MySQL. Features include product catalog, shopping cart, checkout with M-Pesa integration, order management, and a secure admin dashboard for inventory and orders.',
-                'tech_stack'  => ['PHP', 'CodeIgniter 4', 'MySQL', 'Bootstrap', 'JavaScript'],
-                'demo_url'    => '#',
-                'github_url'  => null,
-                'featured'    => 1,
-                'created_at'  => null,
-            ],
-            [
-                'id'          => 2,
-                'title'       => 'AI-Powered Dashboard',
-                'slug'        => 'ai-dashboard',
-                'description' => 'Dashboard that aggregates data from multiple sources and uses simple AI-style rules to surface insights and recommendations. Built with a modern UI and real-time updates.',
-                'tech_stack'  => ['PHP', 'JavaScript', 'Chart.js', 'REST API'],
-                'demo_url'    => '#',
-                'github_url'  => null,
-                'featured'    => 1,
-                'created_at'  => null,
-            ],
-            [
-                'id'          => 3,
-                'title'       => 'Portfolio Website',
-                'slug'        => 'portfolio-website',
-                'description' => 'A single portfolio and small-business site with homepage sections, project showcase, services, blog, downloads, and contact. Designed to be responsive and easy to maintain.',
-                'tech_stack'  => ['PHP', 'CodeIgniter 4', 'MySQL', 'Bootstrap'],
-                'demo_url'    => base_url(),
-                'github_url'  => null,
-                'featured'    => 1,
-                'created_at'  => null,
-            ],
-        ];
-    }
 }

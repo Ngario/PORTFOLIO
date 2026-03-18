@@ -12,6 +12,11 @@
 
 <section class="section">
     <div class="container">
+        <?php if (! empty($dbError)): ?>
+            <div class="alert alert-warning">
+                Downloads are temporarily unavailable on this server (database connection/migrations). If you are on the deployed site, make sure the production database is connected and migrations have been run.
+            </div>
+        <?php endif ?>
         <?php if (! empty($categories)): ?>
             <div class="row g-3 mb-4">
                 <?php foreach ($categories as $cat): ?>
@@ -29,7 +34,7 @@
 
         <h2 class="h5 mb-3">All downloads</h2>
         <?php if (empty($downloads)): ?>
-            <p class="text-muted">No downloads yet.</p>
+            <p class="text-muted"><?= ! empty($dbError) ? 'No downloads can be loaded right now.' : 'No downloads yet.' ?></p>
         <?php else: ?>
             <div class="row g-3">
                 <?php foreach ($downloads as $d): ?>

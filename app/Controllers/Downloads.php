@@ -21,6 +21,7 @@ class Downloads extends BaseController
     {
         $categories = [];
         $downloads  = [];
+        $dbError    = false;
         try {
             $db    = \Config\Database::connect();
             $model = model(DownloadModel::class);
@@ -30,6 +31,7 @@ class Downloads extends BaseController
         } catch (\Throwable $e) {
             $categories = [];
             $downloads  = [];
+            $dbError    = true;
         }
 
         $data = [
@@ -37,6 +39,7 @@ class Downloads extends BaseController
             'description' => 'Books, software, and resources',
             'categories'  => $categories,
             'downloads'   => $downloads,
+            'dbError'     => $dbError,
         ];
         return view('downloads/index', $data);
     }

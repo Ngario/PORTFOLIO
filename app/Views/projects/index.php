@@ -22,6 +22,9 @@
 
 <section class="section">
     <div class="container">
+        <?php if (empty($projects)): ?>
+            <div class="alert alert-info text-center py-4">No projects yet. Add projects in the admin dashboard and they will appear here.</div>
+        <?php endif ?>
         <div class="row g-4">
             <?php foreach ($projects as $project): ?>
             <div class="col-md-6 col-lg-4">
@@ -29,10 +32,12 @@
                     <?php
                     $cardImg = ! empty($project['image'])
                         ? base_url('uploads/' . $project['image'])
-                        : 'https://via.placeholder.com/400x250?text=Project';
+                        : base_url('images/placeholder-download.svg');
+                    $placeholder = base_url('images/placeholder-download.svg');
                     ?>
                     <a href="<?= base_url('projects/' . $project['id']) ?>" class="text-decoration-none text-dark">
-                        <img src="<?= esc($cardImg) ?>" class="card-img-top" alt="<?= esc($project['title']) ?>" style="object-fit: cover; height: 200px;">
+                        <img src="<?= esc($cardImg) ?>" class="card-img-top" alt="<?= esc($project['title']) ?>" style="object-fit: cover; height: 200px; background:#e9ecef;"
+                             onerror="this.onerror=null; this.src='<?= esc($placeholder) ?>';">
                         <div class="card-body">
                             <h5 class="card-title"><?= esc($project['title']) ?></h5>
                             <?php
