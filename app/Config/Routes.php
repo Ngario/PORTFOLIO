@@ -15,6 +15,7 @@ $routes->get('render-debug', 'Pages::renderDebug');
 // HOMEPAGE
 // ============================================
 $routes->get('/', 'Home::index');
+$routes->get('uploads/(.*)', 'Assets::upload/$1');
 
 // ============================================
 // ADMIN DASHBOARD (login + protected CRUD)

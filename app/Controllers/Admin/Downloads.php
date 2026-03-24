@@ -191,6 +191,8 @@ class Downloads extends BaseController
      */
     private function handleUpload(bool $required = true): ?array
     {
+        helper('upload_storage');
+
         $file = $this->request->getFile('file');
         if ($file === null) {
             return $required ? null : null;
@@ -220,9 +222,9 @@ class Downloads extends BaseController
             }
         }
 
-        $targetDir = FCPATH . 'uploads' . DIRECTORY_SEPARATOR . 'downloads';
-        if (! is_dir($targetDir)) {
-            mkdir($targetDir, 0775, true);
+        $targetDir = upload_storage_write_dir('downloads');
+        if ($targetDir === null) {
+            return null;
         }
 
         $safeName = url_title(pathinfo($file->getClientName(), PATHINFO_FILENAME), '-', true);
@@ -231,7 +233,13 @@ class Downloads extends BaseController
         }
         $newName = $safeName . '-' . date('YmdHis') . '.' . $ext;
 
-        if (! $file->move($targetDir, $newName, true)) {
+        try {
+            $moved = $file->move($targetDir, $newName, true);
+        } catch (\Throwable $e) {
+            $moved = false;
+        }
+
+        if (! $moved) {
             return $required ? null : null;
         }
 
@@ -281,6 +289,8 @@ class Downloads extends BaseController
      */
     private function handleDownloadImageUpload(): ?string
     {
+        helper('upload_storage');
+
         $file = $this->request->getFile('cover_image');
         if ($file === null || ! $file->isValid() || $file->getError() === UPLOAD_ERR_NO_FILE) {
             return null;
@@ -290,13 +300,19 @@ class Downloads extends BaseController
         if (! in_array($ext, $allowed, true)) {
             return null;
         }
-        $targetDir = FCPATH . 'uploads' . DIRECTORY_SEPARATOR . 'downloads' . DIRECTORY_SEPARATOR . 'covers';
-        if (! is_dir($targetDir)) {
-            mkdir($targetDir, 0775, true);
+        $targetDir = upload_storage_write_dir('downloads' . DIRECTORY_SEPARATOR . 'covers');
+        if ($targetDir === null) {
+            return null;
         }
         $safeName = url_title(pathinfo($file->getClientName(), PATHINFO_FILENAME), '-', true) ?: 'cover';
         $newName = $safeName . '-' . date('YmdHis') . '.' . $ext;
-        $file->move($targetDir, $newName, true);
+
+        try {
+            $file->move($targetDir, $newName, true);
+        } catch (\Throwable $e) {
+            return null;
+        }
+
         return 'downloads/covers/' . $newName;
     }
 }

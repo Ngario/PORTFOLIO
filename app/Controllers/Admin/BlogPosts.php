@@ -173,6 +173,8 @@ class BlogPosts extends BaseController
      */
     private function handleBlogImageUpload(): ?string
     {
+        helper('upload_storage');
+
         $file = $this->request->getFile('image');
         if ($file === null || ! $file->isValid() || $file->getError() === UPLOAD_ERR_NO_FILE) {
             return null;
@@ -182,13 +184,21 @@ class BlogPosts extends BaseController
         if (! in_array($ext, $allowed, true)) {
             return null;
         }
-        $targetDir = FCPATH . 'uploads' . DIRECTORY_SEPARATOR . 'blog_posts';
-        if (! is_dir($targetDir)) {
-            mkdir($targetDir, 0775, true);
+
+        $targetDir = upload_storage_write_dir('blog_posts');
+        if ($targetDir === null) {
+            return null;
         }
+
         $safeName = url_title(pathinfo($file->getClientName(), PATHINFO_FILENAME), '-', true) ?: 'image';
         $newName = $safeName . '-' . date('YmdHis') . '.' . $ext;
-        $file->move($targetDir, $newName, true);
+
+        try {
+            $file->move($targetDir, $newName, true);
+        } catch (\Throwable $e) {
+            return null;
+        }
+
         return 'blog_posts/' . $newName;
     }
 

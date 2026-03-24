@@ -106,6 +106,8 @@ class Downloads extends BaseController
      */
     public function file(int $id)
     {
+        helper('upload_storage');
+
         try {
             $model = model(DownloadModel::class);
             $item  = $model->find($id);
@@ -116,9 +118,8 @@ class Downloads extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        $path = FCPATH . 'uploads' . DIRECTORY_SEPARATOR . $item['file_path'];
-        $path = realpath($path);
-        if ($path === false || ! is_file($path)) {
+        $path = upload_storage_resolve_file((string) $item['file_path']);
+        if ($path === null) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 

@@ -170,6 +170,8 @@ class Projects extends BaseController
      */
     private function handleProjectImageUpload(): ?string
     {
+        helper('upload_storage');
+
         $file = $this->request->getFile('image');
         if ($file === null || ! $file->isValid() || $file->getError() !== UPLOAD_ERR_OK) {
             return null;
@@ -180,14 +182,18 @@ class Projects extends BaseController
             return null;
         }
 
-        $dir = FCPATH . 'uploads' . DIRECTORY_SEPARATOR . 'projects';
-        if (! is_dir($dir)) {
-            mkdir($dir, 0755, true);
+        $dir = upload_storage_write_dir('projects');
+        if ($dir === null) {
+            return null;
         }
 
         $newName = $file->getRandomName();
-        if (! $file->hasMoved() && $file->move($dir, $newName)) {
-            return 'projects/' . $newName;
+        try {
+            if (! $file->hasMoved() && $file->move($dir, $newName)) {
+                return 'projects/' . $newName;
+            }
+        } catch (\Throwable $e) {
+            return null;
         }
 
         return null;
