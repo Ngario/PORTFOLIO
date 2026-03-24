@@ -384,7 +384,8 @@ Welcome to my professional portfolio. Explore my projects, services, downloads, 
                         <div class="card custom-card">
                             <img src="<?= esc($blog['featured_image'] ?? base_url('images/placeholder-download.svg')) ?>" 
                                  class="card-img-top" 
-                                 alt="<?= esc($blog['title']) ?>">
+                                 alt="<?= esc($blog['title']) ?>"
+                                 onerror="this.onerror=null;this.src='<?= esc(base_url('images/placeholder-download.svg')) ?>';">
                             <div class="card-body">
                                 <?php if (!empty($blog['category_name'])): ?>
                                     <span class="badge bg-success mb-2"><?= esc($blog['category_name']) ?></span>
