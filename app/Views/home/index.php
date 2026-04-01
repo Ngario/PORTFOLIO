@@ -6,6 +6,7 @@
 
 <!-- Extend the main layout -->
 <?= $this->extend('layouts/main') ?>
+<?php helper('upload_storage'); ?>
 
 <!-- Set page title (overrides default in layout) -->
 <?= $this->section('title') ?>
@@ -161,12 +162,14 @@ Welcome to my professional portfolio. Explore my projects, services, downloads, 
                             <!-- Project Image -->
                             <?php
                                     $cardImg = ! empty($project['image'])
-                                        ? base_url('uploads/' . $project['image'])
-                                        : ($project['thumbnail'] ?? 'https://via.placeholder.com/400x250?text=Project');
+                                        ? upload_storage_public_url((string) $project['image'], 'images/placeholder-download.svg')
+                                        : ($project['thumbnail'] ?? base_url('images/placeholder-download.svg'));
+                                    $placeholderImg = base_url('images/placeholder-download.svg');
                                 ?>
                             <img src="<?= esc($cardImg) ?>" 
                                  class="card-img-top" 
-                                 alt="<?= esc($project['title']) ?>">
+                                 alt="<?= esc($project['title']) ?>"
+                                 onerror="this.onerror=null;this.src='<?= esc($placeholderImg) ?>';">
                             
                             <!-- Hover Overlay -->
                             <div class="project-overlay">

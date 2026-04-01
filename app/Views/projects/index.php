@@ -8,6 +8,7 @@
 ?>
 
 <?= $this->extend('layouts/main') ?>
+<?php helper('upload_storage'); ?>
 <?= $this->section('title') ?><?= esc($title ?? 'Projects') ?><?= $this->endSection() ?>
 <?= $this->section('description') ?><?= esc($description ?? 'My projects and work') ?><?= $this->endSection() ?>
 
@@ -31,7 +32,7 @@
                 <div class="card h-100 shadow-sm border-0 overflow-hidden">
                     <?php
                     $cardImg = ! empty($project['image'])
-                        ? base_url('uploads/' . $project['image'])
+                        ? upload_storage_public_url((string) $project['image'], 'images/placeholder-download.svg')
                         : base_url('images/placeholder-download.svg');
                     $placeholder = base_url('images/placeholder-download.svg');
                     ?>

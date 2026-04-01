@@ -7,6 +7,7 @@
 ?>
 
 <?= $this->extend('layouts/main') ?>
+<?php helper('upload_storage'); ?>
 <?= $this->section('title') ?><?= esc($title ?? $project['title']) ?><?= $this->endSection() ?>
 <?= $this->section('description') ?><?= esc(mb_substr(strip_tags($project['description'] ?? $project['title'] ?? ''), 0, 160)) ?><?= $this->endSection() ?>
 
@@ -32,7 +33,7 @@
         <div class="row">
             <div class="col-lg-8 mx-auto">
                 <?php
-                $imgSrc = ! empty($project['image']) ? base_url('uploads/' . $project['image']) : base_url('images/placeholder-download.svg');
+                $imgSrc = ! empty($project['image']) ? upload_storage_public_url((string) $project['image'], 'images/placeholder-download.svg') : base_url('images/placeholder-download.svg');
                 $placeholder = base_url('images/placeholder-download.svg');
                 ?>
                 <img src="<?= esc($imgSrc) ?>" class="img-fluid rounded shadow-sm mb-4" alt="<?= esc($project['title']) ?>" style="background:#e9ecef;"

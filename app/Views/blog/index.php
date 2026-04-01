@@ -6,6 +6,7 @@
 ?>
 
 <?= $this->extend('layouts/main') ?>
+<?php helper('upload_storage'); ?>
 <?= $this->section('title') ?><?= esc($title ?? 'Blog') ?><?= $this->endSection() ?>
 <?= $this->section('description') ?><?= esc($description ?? 'Blog posts and articles') ?><?= $this->endSection() ?>
 
@@ -29,7 +30,7 @@
                 <article class="card h-100 shadow-sm border-0 overflow-hidden">
                     <a href="<?= base_url('blog/' . ($post['slug'] ?? $post['id'])) ?>" class="text-decoration-none text-dark">
                         <?php if (! empty($post['image'])): ?>
-                            <img src="<?= base_url('uploads/' . esc($post['image'])) ?>" class="card-img-top" alt="" style="object-fit:cover;height:180px;" onerror="this.onerror=null;this.src='<?= esc(base_url('images/placeholder-download.svg')) ?>';">
+                            <img src="<?= esc(upload_storage_public_url((string) $post['image'], 'images/placeholder-download.svg')) ?>" class="card-img-top" alt="" style="object-fit:cover;height:180px;" onerror="this.onerror=null;this.src='<?= esc(base_url('images/placeholder-download.svg')) ?>';">
                         <?php else: ?>
                             <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center text-white" style="height:180px;"><i class="fas fa-newspaper fa-3x"></i></div>
                         <?php endif ?>

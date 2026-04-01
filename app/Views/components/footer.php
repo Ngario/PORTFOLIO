@@ -39,7 +39,7 @@
                     <a href="https://x.com/Alphaguy254" class="text-white me-3" title="Twitter">
                         <i class="fab fa-twitter fa-lg"></i>
                     </a>
-                    <a href="https://www.linkedin.com/in/mrambaji-tech-526303375/" class="text-white me-3" title="LinkedIn">
+                    <a href="https://www.linkedin.com/in/idd-mumanyi-a3166a378" class="text-white me-3" title="LinkedIn" target="_blank" rel="noopener">
                         <i class="fab fa-linkedin-in fa-lg"></i>
                     </a>
                     <a href="https://github.com/Ngario" class="text-white me-3" title="GitHub">
@@ -155,8 +155,14 @@
                     </p>
                     <p class="small mb-1">
                         <i class="fas fa-phone me-2"></i>
-                        <a href="tel:+254712345678" class="text-white-50 text-decoration-none">
+                        <a href="tel:+254796349982" class="text-white-50 text-decoration-none">
                             +254 796349982
+                        </a>
+                    </p>
+                    <p class="small mb-1">
+                        <i class="fab fa-whatsapp me-2 text-success"></i>
+                        <a href="https://wa.me/254796349982?text=Hello%20Idd%2C%20I%20would%20like%20to%20inquire%20about%20your%20services." class="text-white-50 text-decoration-none" target="_blank" rel="noopener">
+                            Chat on WhatsApp
                         </a>
                     </p>
                 </div>

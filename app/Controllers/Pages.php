@@ -93,25 +93,40 @@ class Pages extends BaseController
         $subject = $this->request->getPost('subject');
         $message = $this->request->getPost('message');
         
-        // TODO: Save to database (contact_messages table)
-        // $contactModel = new ContactModel();
-        // $contactModel->insert([
-        //     'name' => $name,
-        //     'email' => $email,
-        //     'subject' => $subject,
-        //     'message' => $message,
-        //     'created_at' => date('Y-m-d H:i:s'),
-        // ]);
-        
-        // TODO: Send email notification
-        // $email = \Config\Services::email();
-        // $email->setTo('your@email.com');
-        // $email->setFrom($email, $name);
-        // $email->setSubject($subject);
-        // $email->setMessage($message);
-        // $email->send();
-        
-        // Success message
+        $mailer = \Config\Services::email();
+        $toEmail = trim((string) env('contact.toEmail', 'ngariomumanyi@gmail.com'));
+        $fromEmail = trim((string) env('email.fromEmail', ''));
+        $fromName = trim((string) env('email.fromName', 'Portfolio Contact Form'));
+
+        if ($fromEmail === '') {
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', ['Email service is not configured yet. Please set email.fromEmail and SMTP settings.']);
+        }
+
+        $safeSubject = 'Portfolio Contact: ' . $subject;
+        $safeMessage = nl2br(esc((string) $message));
+        $html = '<h3>New Contact Inquiry</h3>'
+            . '<p><strong>Name:</strong> ' . esc((string) $name) . '</p>'
+            . '<p><strong>Email:</strong> ' . esc((string) $email) . '</p>'
+            . '<p><strong>Subject:</strong> ' . esc((string) $subject) . '</p>'
+            . '<hr>'
+            . '<p><strong>Message:</strong></p>'
+            . '<p>' . $safeMessage . '</p>';
+
+        $mailer->setTo($toEmail);
+        $mailer->setFrom($fromEmail, $fromName);
+        $mailer->setReplyTo((string) $email, (string) $name);
+        $mailer->setSubject($safeSubject);
+        $mailer->setMessage($html);
+
+        if (! $mailer->send()) {
+            log_message('error', 'Contact form email failed: {debug}', ['debug' => $mailer->printDebugger(['headers'])]);
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', ['Sorry, your message could not be sent right now. Please use WhatsApp for urgent inquiries while email is being retried.']);
+        }
+
         return redirect()->to('/contact')
             ->with('success', 'Thank you! Your message has been sent successfully.');
     }

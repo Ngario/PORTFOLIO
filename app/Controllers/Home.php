@@ -25,6 +25,8 @@ class Home extends BaseController
      */
     public function index(): string
     {
+        helper('upload_storage');
+
         // ============================================
         // STEP 1: PREPARE DATA ARRAY
         // ============================================
@@ -75,7 +77,7 @@ class Home extends BaseController
                     'published_at'   => $post['published_at'] ?? $post['created_at'] ?? null,
                     'created_at'     => $post['created_at'] ?? null,
                     'featured_image' => ! empty($post['image'])
-                        ? base_url('uploads/' . $post['image'])
+                        ? upload_storage_public_url((string) $post['image'], 'images/placeholder-download.svg')
                         : base_url('images/placeholder-download.svg'),
                     'category_name'  => $post['category_name'] ?? '',
                 ];

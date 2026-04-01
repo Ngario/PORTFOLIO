@@ -6,6 +6,7 @@
 ?>
 
 <?= $this->extend('layouts/main') ?>
+<?php helper('upload_storage'); ?>
 <?= $this->section('title') ?><?= esc($title ?? $post['title']) ?><?= $this->endSection() ?>
 <?= $this->section('description') ?><?= esc($post['excerpt'] ?? $post['title']) ?><?= $this->endSection() ?>
 
@@ -35,7 +36,7 @@
         <div class="row">
             <div class="col-lg-8 mx-auto">
                 <?php if (! empty($post['image'])): ?>
-                    <img src="<?= base_url('uploads/' . esc($post['image'])) ?>" class="img-fluid rounded mb-4 w-100" alt="" style="max-height:400px;object-fit:cover;" onerror="this.onerror=null;this.src='<?= esc(base_url('images/placeholder-download.svg')) ?>';">
+                    <img src="<?= esc(upload_storage_public_url((string) $post['image'], 'images/placeholder-download.svg')) ?>" class="img-fluid rounded mb-4 w-100" alt="" style="max-height:400px;object-fit:cover;" onerror="this.onerror=null;this.src='<?= esc(base_url('images/placeholder-download.svg')) ?>';">
                 <?php endif ?>
                 <p class="lead"><?= esc($post['excerpt'] ?? '') ?></p>
                 <div class="blog-content"><?= nl2br(esc($post['content'] ?? '')) ?></div>
