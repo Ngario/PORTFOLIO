@@ -161,7 +161,7 @@
                     </p>
                     <p class="small mb-1">
                         <i class="fab fa-whatsapp me-2 text-success"></i>
-                        <a href="https://wa.me/254796349982?text=Hello%20Idd%2C%20I%20would%20like%20to%20inquire%20about%20your%20services." class="text-white-50 text-decoration-none" target="_blank" rel="noopener">
+                        <a href="https://wa.me/254748124233?text=Hello%20Idd%2C%20I%20would%20like%20to%20inquire%20about%20your%20services." class="text-white-50 text-decoration-none" target="_blank" rel="noopener">
                             Chat on WhatsApp
                         </a>
                     </p>
