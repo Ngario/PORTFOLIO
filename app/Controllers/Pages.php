@@ -95,13 +95,28 @@ class Pages extends BaseController
         
         $mailer = \Config\Services::email();
         $toEmail = trim((string) env('contact.toEmail', 'ngariomumanyi@gmail.com'));
+        // Render may not preserve dotted env keys reliably, so we try multiple fallbacks.
         $fromEmail = trim((string) env('email.fromEmail', ''));
+        if ($fromEmail === '') {
+            $fromEmail = trim((string) env('email.fromemail', ''));
+        }
+        if ($fromEmail === '') {
+            $fromEmail = trim((string) env('email.from_email', ''));
+        }
+        if ($fromEmail === '') {
+            $fromEmail = trim((string) env('email.SMTPUser', ''));
+        }
+        if ($fromEmail === '') {
+            $fromEmail = trim((string) env('EMAIL_SMTPUSER', ''));
+        }
         $fromName = trim((string) env('email.fromName', 'Portfolio Contact Form'));
 
         if ($fromEmail === '') {
             return redirect()->back()
                 ->withInput()
-                ->with('errors', ['Email service is not configured yet. Please set email.fromEmail and SMTP settings.']);
+                ->with('errors', [
+                    'Email service is not configured yet (missing sender email). Set `email.fromEmail` in Render, or ensure `email.SMTPUser` is set correctly.'
+                ]);
         }
 
         $safeSubject = 'Portfolio Contact: ' . $subject;
@@ -121,6 +136,13 @@ class Pages extends BaseController
         $mailer->setMessage($html);
 
         if (! $mailer->send()) {
+            log_message('error', 'Contact SMTP config seems misconfigured. Env snapshot (no secrets): {host}|{user}|{protocol}|{port}|{crypto}', [
+                'host'    => env('email.SMTPHost', env('EMAIL_SMTPHOST', '')),
+                'user'    => env('email.SMTPUser', env('EMAIL_SMTPUSER', '')),
+                'protocol'=> env('email.protocol', env('EMAIL_PROTOCOL', '')),
+                'port'    => env('email.SMTPPort', env('EMAIL_SMTPPORT', '')),
+                'crypto'  => env('email.SMTPCrypto', env('EMAIL_SMTPCRYPT', '')),
+            ]);
             log_message('error', 'Contact form email failed: {debug}', ['debug' => $mailer->printDebugger(['headers'])]);
             return redirect()->back()
                 ->withInput()
